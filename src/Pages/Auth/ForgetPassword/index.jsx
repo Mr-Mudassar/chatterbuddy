@@ -1,5 +1,5 @@
-import AuthWrapper from "../../../Shared/AuthWrapper";
-import ForgotPasswordForm from "../../../Shared/Forms/ForgetPasswordForm";
+import AuthWrapper from "@/Components/AuthWrapper";
+import ForgotPasswordForm from "@/Components/Forms/ForgetPasswordForm";
 
 const ForgotPassword = () => {
   return (
@@ -7,7 +7,8 @@ const ForgotPassword = () => {
       <div className=" border border-yellow-300">
         <AuthWrapper
           AuthForm={ForgotPasswordForm}
-          headingText="Verify your Email!"
+          imgHeading="One Package. Unlimited Possibilities."
+          imgDescription="Provide seamless, 24/7 AI assistance for every member of your company."
         ></AuthWrapper>
       </div>
     </div>

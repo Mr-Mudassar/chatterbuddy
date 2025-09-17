@@ -9,7 +9,7 @@ const routes = [
     component: lazy(() => import("../Pages/Auth/SignIn")),
   },
   {
-    path: "/signIn",
+    path: "/login",
     isPublic: true,
     component: lazy(() => import("../Pages/Auth/SignIn")),
   },

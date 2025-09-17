@@ -1,18 +1,14 @@
-import OtpForm from "../../../Shared/Forms/OtpForm";
-import AuthWrapper from "../../../Shared/AuthWrapper";
+import OtpForm from "@/Components/Forms/OtpForm";
+import AuthWrapper from "@/Components/AuthWrapper";
 
 const VerifyOtp = () => {
-  const handleSubmit = (pin) => {
-    console.log("Entered OTP:", pin);
-  };
-
   return (
     <div className="">
       <div className=" border border-yellow-300">
         <AuthWrapper
           AuthForm={OtpForm}
-          OtpHandleSubmit={handleSubmit}
-          headingText="Enter OTP!"
+          imgHeading="One Package. Unlimited Possibilities."
+          imgDescription="Provide seamless, 24/7 AI assistance for every member of your company."
         />
       </div>
     </div>

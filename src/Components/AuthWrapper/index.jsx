@@ -3,7 +3,7 @@ import Logo from "@/Assets/logo.png";
 import BgImage from "@/Assets/admin-auth-img.png";
 
 const AuthWrapper = (props) => {
-  const { AuthForm, headingText } = props;
+  const { AuthForm, imgDescription, imgHeading } = props;
   return (
     <div className="grid md:grid-cols-2 sm:grid-cols-1 min-h-screen overflow-hidden">
       <div className="h-full w-full flex flex-col justify-center items-center">
@@ -15,14 +15,14 @@ const AuthWrapper = (props) => {
           className="flex justify-center items-end h-full w-full bg-cover bg-center bg-no-repeat rounded-xl"
           style={{ backgroundImage: `url(${BgImage})` }}
         >
-          <div className="mb-4">
+          <div className="mb-4 mx-24">
             <h1
               className="font-bold text-3xl mb-2 text-white text-center"
               style={{
                 textShadow: "3px 3px 5px rgba(0, 0, 0, 0.5)",
               }}
             >
-              {headingText}
+              {imgHeading}
             </h1>
             <p
               className="text-white text-center mb-2 font-semibold text-md"
@@ -30,20 +30,8 @@ const AuthWrapper = (props) => {
                 textShadow: "3px 3px 5px rgba(0, 0, 0, 0.5)",
               }}
             >
-              Your Trusted Partner for Quick and Reliable Vehicle Repairs.
+              {imgDescription}
             </p>
-            {/* <img className="mb-3" width={430} src={Images.Car} alt="" /> */}
-            <div className="flex justify-center">
-              <p
-                className="w-80 text-base text-white text-center"
-                style={{
-                  textShadow: "3px 3px 5px rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                our One-Stop Solution for Fast, Reliable, and Secure Vehicle
-                Services.
-              </p>
-            </div>
           </div>
         </div>
       </div>

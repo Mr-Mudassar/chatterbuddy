@@ -1,11 +1,13 @@
 import { Formik } from "formik";
-import { Input } from "@/Components/ui/input";
 import { useDispatch } from "react-redux";
-// import { HiOutlineEnvelope } from "react-icons/hi2";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { addNewTechnicianByAdmin } from "@/Redux/features/admin/adminApi";
+import { Mail, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { SIGNIN_INITIAL_VALUES } from "@/Validations/InitialValues";
 import { SIGNIN_VALIDATION_SCHEMA } from "@/Validations/Validations";
+import { addNewTechnicianByAdmin } from "@/Redux/features/admin/adminApi";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -24,15 +26,15 @@ const SignInForm = () => {
     });
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => setShowPassword((s) => !s);
+
   return (
     <div className="flex align-center justify-center px-4 py-8 h-full m-3">
       <div className="my-auto md:w-96 w-full">
-        <div className="my-8">
-          <h3 className="m-auto text-2xl text-blacks font-bold text-center w-max px-2 border-b border-gray-300 py-2 rounded-lg shadow-lg shadow-[#0051de49]">
-            Babylon WorkShop
-          </h3>
-        </div>
-        <h3 className="w-full text-lg font-bold mb-4">Log In</h3>
+        <h3 className="w-full text-4xl font-bold ">Log In</h3>
+        <p className="text-gray-500 mb-4">Login with your existing account</p>
         <div className="w-full">
           <Formik
             initialValues={SIGNIN_INITIAL_VALUES}
@@ -62,10 +64,13 @@ const SignInForm = () => {
                       value={values.email}
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      className={`pl-10 w-full mb-0 p-2 border rounded ${
+                      className={`px-6 border border-gray-400 rounded-full h-12 pr-12 ${
                         errors.email && touched.email ? "border-red-500" : ""
                       }`}
                     />
+                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Mail size={18} />
+                    </div>
                   </div>
                   {errors.email && touched.email && (
                     <div className="text-red-500 text-sm mt-1">
@@ -77,41 +82,50 @@ const SignInForm = () => {
                   <label htmlFor="password" className="block font-medium mb-1">
                     Password
                   </label>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={values.password}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    className={`w-full mb-0 p-2 border rounded ${
-                      errors.password && touched.password
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                  />
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter password"
+                      value={values.password}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      className={`px-6 border border-gray-400 rounded-full h-12  pr-12 ${
+                        errors.password && touched.password
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    />
+                    
+                    <button
+                      type="button"
+                      onClick={toggleShowPassword}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                   {errors.password && touched.password && (
                     <div className="text-red-500 text-sm mt-1">
                       {errors.password}
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-end mb-6">
                   <Link to="/forgotPassword">
-                    <p className="text-right mb-0 text-[#0052DE] text-sm">
+                    <p className="text-right mb-0 text-primary text-sm font-semibold">
                       Forgot password
                     </p>
                   </Link>
                 </div>
                 <div className="mt-3">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full mb-2 py-3 text-white bg-[#0052DE] rounded hover:bg-[#003fa3] transition"
-                  >
-                    Sign In
-                  </button>
+                  <Button type="submit" className="w-full h-12 rounded-full">
+                    LOG IN
+                  </Button>
                 </div>
               </form>
             )}

@@ -49,8 +49,10 @@
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  /* Brand primary color (hex) - used for buttons, accents */
+  --primary: #00B48D;
+  /* Primary foreground (text) to sit on top of primary backgrounds */
+  --primary-foreground: #ffffff;
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
@@ -83,8 +85,9 @@
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  /* Keep brand primary in dark mode as well */
+  --primary: #00B48D;
+  --primary-foreground: #ffffff;
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);
@@ -111,10 +114,40 @@
 }
 
 @layer base {
+  /* Basic resets using the theme variables instead of Tailwind @apply to avoid @apply processing issues */
   * {
-    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+    /* border and focus ring colors are stored in variables */
+    outline-color: var(--ring);
+    border-color: var(--border);
   }
+
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  }
+
+  /* Make form controls rounded-full and use theme variables for colors */
+  input,
+  textarea,
+  select,
+  .input {
+    border-radius: 9999px;
+    background-color: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Buttons using primary color by default when they have the primary class or are submit buttons */
+  .btn-primary,
+  button[type="submit"] {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border: none;
+    border-radius: calc(var(--radius));
+    padding: 0.5rem 1rem;
+    cursor: pointer;
   }
 }

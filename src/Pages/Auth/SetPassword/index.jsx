@@ -1,5 +1,5 @@
-import AuthWrapper from "../../../Shared/AuthWrapper";
-import SetPasswordForm from "../../../Shared/Forms/SetPasswordForm";
+import AuthWrapper from "@/Components/AuthWrapper";
+import SetPasswordForm from "@/Components/Forms/SetPasswordForm";
 
 const ResetPassword = () => {
   return (
