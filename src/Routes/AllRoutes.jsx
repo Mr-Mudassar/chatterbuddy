@@ -28,6 +28,11 @@ const routes = [
     isPublic: true,
     component: lazy(() => import("../Pages/Auth/SetPassword")),
   },
+  {
+    path: "/choosePlan",
+    isPublic: true,
+    component: lazy(() => import("../Pages/Auth/BuyPackage/")),
+  },
 ]
   .concat(AdminRoutes)
   .concat(TechnicianRoutes);

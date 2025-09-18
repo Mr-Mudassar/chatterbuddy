@@ -1,25 +1,17 @@
 import Navbar from "./Navbar";
-import SideBar from "./SideBar";
-import { useEffect, useState } from "react";
+import { AppSidebar } from "./SideBar";
+import { SidebarInset, SidebarProvider } from "@/Components/ui/sidebar";
 
-const UserLayout = ({ isPrivate, children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(
-    window.innerWidth >= 1024 ? true : false
-  );
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
+export default function DashboardLayout({ children }) {
   return (
-    <div>
-      {isPrivate && <Navbar toggleSidebar={toggleSidebar} />}
-      {isPrivate && (
-        <SideBar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-      )}
-      <div className={`border bg-gray-100 min-h-screen ${isPrivate ? "lg:ml-64" : ""}`}>{children}</div>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <Navbar />
+        <main className="flex-1 p-4 md:pl-1 md:pt-0 md:pr-3 bg-[#f6f6f6]">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
-};
-
-export default UserLayout;
+}

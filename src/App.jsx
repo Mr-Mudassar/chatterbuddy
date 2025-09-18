@@ -8,9 +8,9 @@ import { PrivateRoute } from "./Routes/PrivateRoutes";
 import LoadingScreen from "@/Components/LoadingScreen";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
-function withLayout(WrappedComponent, isPrivate = false) {
+function withLayout(WrappedComponent) {
   const ComponentWithLayout = (props) => (
-    <Layout isPrivate={isPrivate}>
+    <Layout>
       <WrappedComponent {...props} />
     </Layout>
   );
@@ -41,13 +41,13 @@ function App() {
                       <PrivateRoute
                         props={route}
                         role={route?.role}
-                        Component={withLayout(Component, true)}
+                        Component={withLayout(Component)}
                       />
                     ) : (
                       <PublicRoute
                         props={route}
                         role={route?.role}
-                        Component={withLayout(Component, false)}
+                        Component={Component}
                       />
                     )}
                   </Suspense>

@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 export function PrivateRoute({ Component, props, role }) {
   const navigate = useNavigate();
   // const { user } = useSelector((state) => state.user);
-  const user = null;
+  // const user = null;
+  const user = "Dummy user";
 
   useEffect(() => {
     if (!user) {
       navigate("/signIn");
     } else if (user) {
-      user.role !== role && navigate("/");
+      // user.role !== role && navigate("/");
     }
   }, [navigate, user]);
 

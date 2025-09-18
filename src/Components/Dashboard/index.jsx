@@ -1,0 +1,167 @@
+import React from "react";
+import UserBlue from "@/Assets/user-blue.png";
+import UserPurple from "@/Assets/user-purple.png";
+import UserYellow from "@/Assets/user-yellow.png";
+import { Card } from "../ui/card";
+import { ArrowUpRight } from "lucide-react";
+import LineChart from "../Charts/LineChart";
+import {
+  Select,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+} from "@/Components/ui/select";
+import SubscriptionChart from "../Charts/DonutChart";
+import DataTable from "../DataTable";
+
+const DashboardComponent = () => {
+  const DashboardCardData = [
+    {
+      value: 1500,
+      title: "Total Users",
+      image: UserPurple,
+      description: "Number of registered users",
+    },
+    {
+      value: 1500,
+      title: "Total Enterprise",
+      image: UserYellow,
+      description: "Number of registered users",
+    },
+    {
+      value: 1500,
+      title: "Active Users",
+      image: UserBlue,
+      description: "Number of registered users",
+    },
+  ];
+
+  const TechnicianListingTableHeadings = [
+    {
+      name: "User ID",
+      selector: (row) => row?.firstName + " " + row?.lastName,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row?.email,
+      sortable: true,
+    },
+    {
+      name: "Scription",
+      selector: (row) => row?.phoneNumber,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) =>
+        row.availability ? (
+          <div className="border border-green-600 text-green-600 bg-green-200 rounded-sm px-2 py-1 text-center text-sm w-24">
+            Available
+          </div>
+        ) : (
+          <div className="border border-gray-600 text-gray-600 bg-gray-300 rounded-sm px-2 py-1 text-center text-sm w-24">
+            Unavailable
+          </div>
+        ),
+      sortable: true,
+    },
+  ];
+
+  const dummyTableData = [
+    {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phoneNumber: "+1 555-1234",
+      availability: true,
+    },
+    {
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phoneNumber: "+1 555-5678",
+      availability: false,
+    },
+    {
+      firstName: "Alice",
+      lastName: "Johnson",
+      email: "alice.johnson@example.com",
+      phoneNumber: "+1 555-8765",
+      availability: true,
+    },
+    {
+      firstName: "Bob",
+      lastName: "Williams",
+      email: "bob.williams@example.com",
+      phoneNumber: "+1 555-4321",
+      availability: false,
+    },
+  ];
+
+  return (
+    <div className="space-y-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {DashboardCardData.map((card, index) => (
+          <Card key={index} className="p-4 border-none  rounded-lg shadow-md  ">
+            <p className="text-lg text-black font-semibold">{card.title}</p>
+            <div className="flex items-center justify-between mt-2">
+              <div className="flex gap-2 items-center">
+                <p className="text-5xl font-semibold ">{card.value}</p>
+                <ArrowUpRight className="h-7 w-7  text-green-500 mt-2" />
+              </div>
+              <img
+                src={card.image}
+                alt={card.title}
+                className="h-10 w-10 mr-4"
+              />
+            </div>
+            <p className="text-sm">{card.description}</p>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded-lg shadow-md h-full col-span-2">
+          <div className="flex  justify-between items-center">
+            <p className="font-semibold text-lg">Overview</p>
+            <Select onValueChange={(val) => setFieldValue("employees", val)}>
+              <SelectTrigger className=" py-2      border-gray-400 rounded-full ">
+                <SelectValue placeholder="Overview" />
+              </SelectTrigger>
+              <SelectContent>
+                {["Yearly", "Montly", "Daily"].map((opt) => (
+                  <SelectItem key={opt} value={opt}>
+                    {opt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <LineChart
+            mode={"RedemptionsGraph"}
+            graphData={[
+              34, 4343, 56454, 5454634, 6465436436, 636436, 46436, 46436, 46436,
+              46436, 46436, 46436,
+            ]}
+          />
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow-md h-full    ">
+          <p className="font-semibold text-lg mb-2">Subscriptions</p>
+          <SubscriptionChart />
+        </div>
+      </div>
+
+      <DataTable
+        pagination={true}
+        selectableRows={false}
+        expandableRows={false}
+        allData={dummyTableData}
+        tableHeadings={TechnicianListingTableHeadings}
+      />
+    </div>
+  );
+};
+
+export default DashboardComponent;

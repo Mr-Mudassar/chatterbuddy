@@ -148,3 +148,11 @@ export const NEW_PASSWORD_VALIDATION_SCHEMA = Yup.object().shape({
   email: emailValidation,
   newPassword: newPasswordValidation,
 });
+
+export const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
+  companyName: nameValidation,
+  countryCode: generalTextValidation,
+  contactNumber: phoneValidation,
+  subscriptionPackage: generalTextValidation,
+  employees: generalTextValidation,
+});

@@ -71,3 +71,11 @@ export const NEW_PASSWORD_INITIAL_VALUES = {
   email: "",
   newPassword: "",
 };
+
+export const PURCHASE_PLAN_INITIAL_VALUES = {
+  companyName: "",
+  countryCode: "+44",
+  contactNumber: "",
+  subscriptionPackage: "enterprise",
+  employees: "",
+};
