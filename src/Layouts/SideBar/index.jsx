@@ -35,8 +35,8 @@ import Logo from "@/Assets/logo.png";
 
 const adminNavigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Enterprise", href: "/dashboard/posts", icon: Building },
-  { name: "User Management", href: "/dashboard/reports", icon: Users },
+  { name: "Enterprise", href: "/admin/enterprises", icon: Building },
+  { name: "User Management", href: "/admin/usersManagement", icon: Users },
 ];
 
 export function AppSidebar() {
@@ -90,8 +90,8 @@ export function AppSidebar() {
                       isActive={isActive}
                       className={
                         isActive
-                          ? "!bg-primary rounded-full !py-6  !text-white flex items-center gap-3 w-full px-4"
-                          : "flex items-center gap-3 w-full !py-6 px-3"
+                          ? "!bg-primary rounded-full  !py-6  !text-white flex items-center gap-3 w-full px-4"
+                          : "flex items-center gap-3 w-full !py-6 px-3 rounded-full"
                       }
                     >
                       <Link

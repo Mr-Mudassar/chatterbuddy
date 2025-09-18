@@ -13,6 +13,18 @@ const AdminRoutes = [
     path: "/admin/dashboard",
     component: lazy(() => import("@/Pages/Admin/Dashboard")),
   },
+  {
+    role: "admin",
+    isPublic: false,
+    path: "/admin/enterprises",
+    component: lazy(() => import("@/Pages/Admin/EnterPriseListing")),
+  },
+  {
+    role: "admin",
+    isPublic: false,
+    path: "/admin/usersManagement",
+    component: lazy(() => import("@/Pages/Admin/UserManagement")),
+  },
 ];
 
 export default AdminRoutes;

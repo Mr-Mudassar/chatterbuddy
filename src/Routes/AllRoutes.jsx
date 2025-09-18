@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import AdminRoutes from "./AdminRoutes";
-import TechnicianRoutes from "./TechnicianRoutes";
+import TechnicianRoutes from "./EnterpriseRoutes";
 
 const routes = [
   {

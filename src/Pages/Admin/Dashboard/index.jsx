@@ -3,7 +3,7 @@ import React from "react";
 
 const Dashboard = () => {
   return (
-    <div className="border-1 border-red-600 rounded-md">
+    <div className="rounded-md">
       <DashboardComponent />
     </div>
   );

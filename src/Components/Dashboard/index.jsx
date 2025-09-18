@@ -14,6 +14,7 @@ import {
 } from "@/Components/ui/select";
 import SubscriptionChart from "../Charts/DonutChart";
 import DataTable from "../DataTable";
+import { Link } from "react-router-dom";
 
 const DashboardComponent = () => {
   const DashboardCardData = [
@@ -153,13 +154,23 @@ const DashboardComponent = () => {
         </div>
       </div>
 
-      <DataTable
-        pagination={true}
-        selectableRows={false}
-        expandableRows={false}
-        allData={dummyTableData}
-        tableHeadings={TechnicianListingTableHeadings}
-      />
+      <div className="rounded-lg shadow-md bg-white">
+        <div className="flex items-center justify-between px-6 py-4">
+          <p className="font-semibold text-lg">User Listing</p>
+          <Link to="/admin/employees" className="text-primary font-semibold">
+            See All
+          </Link>
+        </div>
+        <div className="px-6 rounded-lg">
+          <DataTable
+            pagination={true}
+            selectableRows={false}
+            expandableRows={false}
+            allData={dummyTableData}
+            tableHeadings={TechnicianListingTableHeadings}
+          />
+        </div>
+      </div>
     </div>
   );
 };

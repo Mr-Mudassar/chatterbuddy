@@ -28,7 +28,8 @@ const DataTableComponent = (props) => {
     headCells: {
       style: {
         fontSize: "14px",
-        color: "#666666",
+        color: "black",
+        backgroundColor: "#e6f8f4",
       },
     },
     rows: {
