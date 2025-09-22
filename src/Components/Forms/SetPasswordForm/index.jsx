@@ -5,9 +5,8 @@ import { useDispatch } from "react-redux";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { Lock, Eye, EyeOff } from "lucide-react";
-import { SET_PASSWORD_API_URL } from "@/lib/constants";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addNewTechnicianByAdmin } from "@/redux/features/admin/adminApi";
+import { newPassword } from "@/redux/features/admin/adminApi";
 import { NEW_PASSWORD_INITIAL_VALUES } from "@/Validations/InitialValues";
 import { NEW_PASSWORD_VALIDATION_SCHEMA } from "@/Validations/Validations";
 
@@ -16,18 +15,22 @@ const SetPasswordForm = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  // useEffect(() => {
-  //   !location?.state?.email && navigate("/");
-  // }, []);
+  useEffect(() => {
+    (!location?.state?.email || !location?.state?.code) && navigate("/");
+  }, []);
 
   const handleSubmit = (values) => {
     const data = {
-      apiEndpoint: SET_PASSWORD_API_URL,
-      requestData: JSON.stringify(values),
+      apiEndpoint: "/auth/reset-password",
+      requestData: JSON.stringify({
+        ...values,
+        email: location?.state?.email,
+        code: location?.state?.code,
+      }),
     };
 
-    dispatch(addNewTechnicianByAdmin(data)).then((res) => {
-      if (res.type === "setNewPassword/fulfilled") {
+    dispatch(newPassword(data)).then((res) => {
+      if (res.type === "newPassword/fulfilled") {
         navigate("/");
       }
     });

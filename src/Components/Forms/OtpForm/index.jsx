@@ -3,7 +3,11 @@ import OtpInput from "react-otp-input";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addNewTechnicianByAdmin } from "@/redux/features/admin/adminApi";
+import {
+  addNewTechnicianByAdmin,
+  resendOtp,
+  verfiyOtp,
+} from "@/redux/features/admin/adminApi";
 import { VERIFY_OTP_INITIAL_VALUES } from "@/Validations/InitialValues";
 import { VERIFY_OTP_VALIDATION_SCHEMA } from "@/Validations/Validations";
 import { VERIFY_OTP_API_URL } from "@/lib/constants";
@@ -17,9 +21,9 @@ const OtpForm = () => {
   const [userEmail, setUserEmail] = useState(10);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
 
-  // useEffect(() => {
-  //   !location?.state?.email && navigate("/");
-  // }, []);
+  useEffect(() => {
+    !location?.state?.email && navigate("/");
+  }, []);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -32,16 +36,33 @@ const OtpForm = () => {
 
   const handleSubmit = (values) => {
     const data = {
-      apiEndpoint: VERIFY_OTP_API_URL,
-      requestData: JSON.stringify(values),
+      apiEndpoint: "/auth/verify-otp",
+      requestData: JSON.stringify({
+        code: values?.token,
+        email: location?.state?.email,
+      }),
     };
 
-    dispatch(addNewTechnicianByAdmin(data)).then((res) => {
-      if (res.type === "verifyEmailOtp/fulfilled") {
+    dispatch(verfiyOtp(data)).then((res) => {
+      if (res.type === "verfiyOtp/fulfilled") {
         navigate("/setNewPassword", {
-          state: { email: location?.state?.email },
+          state: { email: location?.state?.email, code: values?.token },
         });
       }
+    });
+  };
+
+  const handleResendOtp = () => {
+    const data = {
+      apiEndpoint: "/auth/re-send-otp",
+      requestData: JSON.stringify({
+        email: location?.state?.email,
+      }),
+    };
+
+    dispatch(resendOtp(data)).then((res) => {
+      // if (res.type === "resendOtp/fulfilled") {
+      // }
     });
   };
 
@@ -94,13 +115,15 @@ const OtpForm = () => {
               </div>
 
               <Button type="submit" className="w-full h-12 rounded-full">
-                VERIFY  
+                VERIFY
               </Button>
               <div className="flex justify-center items-center mb-4 mt-2">
-                <p className="text-gray-500 mr-2 text-sm">Didn't receive the code?</p>  
+                <p className="text-gray-500 mr-2 text-sm">
+                  Didn't receive the code?
+                </p>
                 <button
                   type="button"
-                  // onClick={handleResendOtp}
+                  onClick={handleResendOtp}
                   className={`text-sm font-bold ${
                     isResendDisabled ? "text-gray-400" : "text-primary"
                   }`}

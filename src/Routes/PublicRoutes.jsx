@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 export function PublicRoute({ Component, props, role }) {
   const navigate = useNavigate();
-  // const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
+  console.log("User in public", user);
   // const user = null;
-  const user = "Dummy user";
+  // const user = "Dummy user";
 
   useLayoutEffect(() => {
     if (user) {

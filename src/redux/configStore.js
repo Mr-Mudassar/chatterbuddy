@@ -13,7 +13,7 @@ const persistConfig = {
   key: "root",
 };
 const rootReducer = combineReducers({
-  adminSlice: adminSlice,
+  user: adminSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
+  login,
+  verfiyOtp,
+  resendOtp,
+  newPassword,
+  forgetPassword,
+  createCompany,
+  getAllCompanies,
   addNewTechnicianByAdmin,
   updateTechnicianByAdmin,
   deleteTechnicianByAdmin,
-  getAllTechniciansByAdmin,
   validateTipReceiver,
   createStripeIntent,
 } from "./adminApi";
@@ -18,6 +24,7 @@ export const adminSlice = createSlice({
     error: null,
     success: null,
     loading: "idle",
+    userRole: null,
   },
   reducers: {
     customLogout: (state) => {
@@ -27,62 +34,75 @@ export const adminSlice = createSlice({
       state.token = null;
       state.success = null;
       state.loading = "idle";
+      state.userRole = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllTechniciansByAdmin.pending, (state) => {
+      .addCase(login.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(getAllTechniciansByAdmin.fulfilled, (state) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.loading = "succeeded";
+        state.user = action?.payload?.data?.user;
+        state.token = action?.payload?.accessToken;
+        state.userRole = action?.payload?.data?.user?.userRole;
       })
-      .addCase(getAllTechniciansByAdmin.rejected, (state) => {
+      .addCase(login.rejected, (state) => {
         state.loading = "failed";
       })
-      .addCase(addNewTechnicianByAdmin.pending, (state) => {
+      .addCase(forgetPassword.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(addNewTechnicianByAdmin.fulfilled, (state) => {
+      .addCase(forgetPassword.fulfilled, (state) => {
         state.loading = "succeeded";
       })
-      .addCase(addNewTechnicianByAdmin.rejected, (state) => {
+      .addCase(forgetPassword.rejected, (state) => {
         state.loading = "failed";
       })
-      .addCase(updateTechnicianByAdmin.pending, (state) => {
+      .addCase(verfiyOtp.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(updateTechnicianByAdmin.fulfilled, (state) => {
+      .addCase(verfiyOtp.fulfilled, (state) => {
         state.loading = "succeeded";
       })
-      .addCase(updateTechnicianByAdmin.rejected, (state) => {
+      .addCase(verfiyOtp.rejected, (state) => {
         state.loading = "failed";
       })
-      .addCase(deleteTechnicianByAdmin.pending, (state) => {
+      .addCase(resendOtp.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(deleteTechnicianByAdmin.fulfilled, (state) => {
+      .addCase(resendOtp.fulfilled, (state) => {
         state.loading = "succeeded";
       })
-      .addCase(deleteTechnicianByAdmin.rejected, (state) => {
+      .addCase(resendOtp.rejected, (state) => {
         state.loading = "failed";
       })
-      .addCase(validateTipReceiver.pending, (state) => {
+      .addCase(newPassword.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(validateTipReceiver.fulfilled, (state) => {
+      .addCase(newPassword.fulfilled, (state) => {
         state.loading = "succeeded";
       })
-      .addCase(validateTipReceiver.rejected, (state) => {
+      .addCase(newPassword.rejected, (state) => {
         state.loading = "failed";
       })
-      .addCase(createStripeIntent.pending, (state) => {
+      .addCase(createCompany.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(createStripeIntent.fulfilled, (state) => {
+      .addCase(createCompany.fulfilled, (state) => {
         state.loading = "succeeded";
       })
-      .addCase(createStripeIntent.rejected, (state) => {
+      .addCase(createCompany.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(getAllCompanies.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(getAllCompanies.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(getAllCompanies.rejected, (state) => {
         state.loading = "failed";
       });
   },

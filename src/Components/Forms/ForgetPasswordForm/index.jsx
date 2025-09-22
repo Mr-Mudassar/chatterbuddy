@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { Input } from "@/Components/ui/input";
 import { FORGET_PASSWORD_API_URL } from "@/lib/constants";
-import { addNewTechnicianByAdmin } from "@/redux/features/admin/adminApi";
+import { addNewTechnicianByAdmin, forgetPassword } from "@/redux/features/admin/adminApi";
 import { FORGOT_PASSWORD_SCHEMA } from "@/Validations/Validations";
 import { FORGOT_PASSWORD_INITIAL_VALUES } from "@/Validations/InitialValues";
 import { Button } from "@/Components/ui/button";
@@ -17,12 +17,12 @@ const ForgotPasswordForm = (props) => {
 
   const handleSubmit = (values) => {
     const data = {
-      apiEndpoint: FORGET_PASSWORD_API_URL,
+      apiEndpoint: "/auth/forgot-password",
       requestData: JSON.stringify(values),
     };
 
-    dispatch(addNewTechnicianByAdmin(data)).then((res) => {
-      if (res.type === "forgotPassword/fulfilled") {
+    dispatch(forgetPassword(data)).then((res) => {
+      if (res.type === "forgetPassword/fulfilled") {
         console.log(res?.payload?.data);
         navigate("/verifyOtp", { state: { email: values?.email } });
       }
