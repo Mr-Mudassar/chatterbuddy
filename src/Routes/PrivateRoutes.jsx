@@ -6,14 +6,14 @@ export function PrivateRoute({ Component, props, role }) {
   const navigate = useNavigate();
   // state shape uses adminSlice reducer
   const { user } = useSelector((state) => state?.user);
-  console.log("User in private" ,user);
+  console.log("Role props", role, user);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!user) {
-      navigate("/signIn");
+      navigate("/login");
     } else if (user) {
       // if role-based routing is needed, uncomment and adjust below
-      // user.role !== role && navigate("/");
+      user.role !== role && navigate("/");
     }
   }, [navigate, user]);
 

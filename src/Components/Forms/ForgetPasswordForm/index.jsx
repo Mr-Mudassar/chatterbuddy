@@ -23,7 +23,6 @@ const ForgotPasswordForm = (props) => {
 
     dispatch(forgetPassword(data)).then((res) => {
       if (res.type === "forgetPassword/fulfilled") {
-        console.log(res?.payload?.data);
         navigate("/verifyOtp", { state: { email: values?.email } });
       }
     });

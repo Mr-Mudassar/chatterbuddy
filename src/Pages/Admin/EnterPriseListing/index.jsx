@@ -6,6 +6,7 @@ import { Button } from "@/Components/ui/button";
 import { Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/Components/ui/dialog";
 import BuyPackageForm from "@/Components/Forms/BuyPackageForm";
+import { StatusComponent } from "@/lib/function";
 
 const EnterpriseListing = () => {
   const dispatch = useDispatch();
@@ -19,10 +20,6 @@ const EnterpriseListing = () => {
 
     dispatch(getAllCompanies(data)).then((res) => {
       if (res?.type === "getAllCompanies/fulfilled") {
-        console.log(
-          "Respone of all companies listing",
-          res?.payload?.data?.data
-        );
         setAllCompaniesData(res?.payload?.data?.data);
       }
     });
@@ -61,17 +58,7 @@ const EnterpriseListing = () => {
     },
     {
       name: "Status",
-      selector: (row) =>
-        row.isActive ? (
-          <div className="border border-green-600 text-green-600 bg-green-200 rounded-sm px-2 py-1 text-center text-sm w-16">
-            Active
-          </div>
-        ) : (
-          <div className="border border-gray-600 text-gray-600 bg-gray-300 rounded-sm px-2 py-1 text-center text-sm w-16">
-            Inactive
-          </div>
-        ),
-      sortable: true,
+      selector: (row) => StatusComponent(row?.isActive),
     },
   ];
 
@@ -90,7 +77,7 @@ const EnterpriseListing = () => {
         </p>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 w-full flex justify-end">
         <Button
           className={"h-12 rounded-full px-4"}
           onClick={() => setCreateCompanyModal(true)}
@@ -113,7 +100,7 @@ const EnterpriseListing = () => {
         open={createCompanyModal}
         onOpenChange={() => setCreateCompanyModal(!createCompanyModal)}
       >
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-scroll">
           <BuyPackageForm />
         </DialogContent>
       </Dialog>

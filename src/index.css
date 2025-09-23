@@ -114,6 +114,7 @@
 }
 
 @layer base {
+
   /* Basic resets using the theme variables instead of Tailwind @apply to avoid @apply processing issues */
   * {
     box-sizing: border-box;
@@ -152,10 +153,15 @@
   }
 }
 
+.react-tel-input .flag-dropdown {
+  border-radius: 25px 0 0 25px !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

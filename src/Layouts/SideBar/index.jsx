@@ -1,21 +1,4 @@
 import {
-  Mail,
-  Flag,
-  Users,
-  Shield,
-  SquareMenu,
-  Loader2,
-  Settings,
-  Activity,
-  FileText,
-  MessageSquare,
-  LayoutDashboard,
-  Newspaper,
-  Store,
-  SlidersHorizontal,
-  Building,
-} from "lucide-react";
-import {
   Sidebar,
   useSidebar,
   SidebarRail,
@@ -29,9 +12,13 @@ import {
   SidebarMenuButton,
   SidebarGroupContent,
 } from "@/Components/ui/sidebar";
+import Logo from "@/Assets/logo.png";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "@/Assets/logo.png";
+import { Users, LayoutDashboard, Building, LogOut } from "lucide-react";
+import { customLogout } from "@/redux/features/admin/adminSlice";
+import toast from "react-hot-toast";
 
 const adminNavigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -41,8 +28,14 @@ const adminNavigation = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const pathname = location.pathname;
   const [loadingPath, setLoadingPath] = useState(null);
+
+  const CustomLogout = () => {
+    dispatch(customLogout());
+    toast.success("Logged out successfully");
+  };
   // const { isMobile, setOpenMobile } = useSidebar();
   // const [loadingPath, setLoadingPath] = (useState < string) | (null > null);
 
@@ -112,8 +105,12 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="px-4 py-3 text-xs text-gray-500 text-center border-t border-sidebar-border">
-          GolfGuiders Orbit v1.0
+        <div
+          className="flex items-center gap-2 mx-2 mb-2 hover:cursor-pointer hover:bg-red-100 px-4 py-3 rounded-md"
+          onClick={() => CustomLogout()}
+        >
+          <LogOut className="h-4 w-4 text-red-700" />
+          <p className="text-sm text-red-700 font-semibold">Logout</p>
         </div>
       </SidebarFooter>
 

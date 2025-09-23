@@ -97,12 +97,11 @@ export const createCompany = createAsyncThunk(
   }
 );
 
-export const addNewTechnicianByAdmin = createAsyncThunk(
-  "addNewTechnicianByAdmin",
-  async ({ apiEndpoint, requestData }, thunkAPI) => {
+export const getAllUsers = createAsyncThunk(
+  "getAllUsers",
+  async ({ apiEndpoint }, thunkAPI) => {
     try {
-      const response = await axiosInstance.post(apiEndpoint, requestData);
-      toast.success(response?.data?.message);
+      const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
       toast.error(error?.response?.data?.data?.message);
@@ -111,11 +110,11 @@ export const addNewTechnicianByAdmin = createAsyncThunk(
   }
 );
 
-export const updateTechnicianByAdmin = createAsyncThunk(
-  "updateTechnicianByAdmin",
+export const createUser = createAsyncThunk(
+  "createUser",
   async ({ apiEndpoint, requestData }, thunkAPI) => {
     try {
-      const response = await axiosInstance.put(apiEndpoint, requestData);
+      const response = await axiosInstance.post(apiEndpoint, requestData);
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
@@ -135,21 +134,6 @@ export const deleteTechnicianByAdmin = createAsyncThunk(
     } catch (error) {
       toast.error(error?.response?.data?.data?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
-    }
-  }
-);
-
-export const validateTipReceiver = createAsyncThunk(
-  "validateTipReceiver",
-  async ({ apiEndpoint, requestData }, thunkAPI) => {
-    try {
-      const response = await axiosInstance.post(apiEndpoint, requestData);
-      return response.data;
-    } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
-      return thunkAPI.rejectWithValue({
-        statusCode: error.response.status,
-      });
     }
   }
 );

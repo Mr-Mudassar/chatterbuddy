@@ -3,19 +3,19 @@ import { lazy } from "react";
 const TechnicianRoutes = [
   {
     isPublic: false,
-    role: "enterprise",
+    role: "ADMIN",
     path: "/users",
     component: lazy(() => import("@/Pages/Enterprise/MyUsers")),
   },
   {
     isPublic: false,
-    role: "enterprise",
+    role: "ADMIN",
     path: "/dashboard",
     component: lazy(() => import("@/Pages/Enterprise/Dashboard")),
   },
   {
     isPublic: false,
-    role: "enterprise",
+    role: "ADMIN",
     path: "/subscriptions",
     component: lazy(() => import("@/Pages/Enterprise/SubscriptionPlans")),
   },

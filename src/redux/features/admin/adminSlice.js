@@ -5,14 +5,11 @@ import {
   verfiyOtp,
   resendOtp,
   newPassword,
+  getAllUsers,
   forgetPassword,
   createCompany,
+  createUser,
   getAllCompanies,
-  addNewTechnicianByAdmin,
-  updateTechnicianByAdmin,
-  deleteTechnicianByAdmin,
-  validateTipReceiver,
-  createStripeIntent,
 } from "./adminApi";
 
 export const adminSlice = createSlice({
@@ -28,7 +25,6 @@ export const adminSlice = createSlice({
   },
   reducers: {
     customLogout: (state) => {
-      console.log("Custom logout");
       state.email = "";
       state.user = null;
       state.token = null;
@@ -45,7 +41,7 @@ export const adminSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.user = action?.payload?.data?.user;
-        state.token = action?.payload?.accessToken;
+        state.token = action?.payload?.data?.accessToken;
         state.userRole = action?.payload?.data?.user?.userRole;
       })
       .addCase(login.rejected, (state) => {
@@ -103,6 +99,24 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(getAllCompanies.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(getAllUsers.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(getAllUsers.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(getAllUsers.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(createUser.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(createUser.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(createUser.rejected, (state) => {
         state.loading = "failed";
       });
   },

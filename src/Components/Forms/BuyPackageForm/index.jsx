@@ -1,6 +1,3 @@
-// import Dropdown from "../../Dropdown";
-// import CustomBtn from "../../CustomBtn";
-// import { RxUpdate } from "react-icons/rx";
 import {
   Select,
   SelectItem,
@@ -13,83 +10,84 @@ import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
-import { PURCHASE_PLAN_API_ENDPOINT } from "@/lib/constants";
-import { addNewTechnicianByAdmin } from "@/redux/features/admin/adminApi";
-import {
-  PURCHASE_PLAN_VALIDATION_SCHEMA,
-  UPDATE_TECHNICIAN_VALIDATION_SCHEMA,
-} from "@/Validations/Validations";
-import {
-  PURCHASE_PLAN_INITIAL_VALUES,
-  UPDATE_TIME_PERIOD_INITIAL_VALUES,
-} from "@/Validations/InitialValues";
-// import { PhoneInput } from "@/components/ui/phone-input"; // If you have a phone input, otherwise use Input
+import React from "react";
+import { createCompany } from "@/redux/features/admin/adminApi";
+import PhoneNumberInputField from "@/Components/PhoneNumberInputField";
+import * as Yup from "yup";
+
+// Validation schema with Yup
+const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
+  name: Yup.string().required("Company name is required"),
+  contact: Yup.string()
+    .required("Phone number is required")
+    .matches(/^[0-9+\- ]+$/, "Invalid phone number"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  subscriptionPlan: Yup.string().required("Subscription plan is required"),
+  peopleLimit: Yup.string().required("Please select number of employees"),
+});
 
 const SUBSCRIPTION_PACKAGES = [
-  { value: "enterprise", label: "Enterprise" },
-  { value: "business", label: "Business" },
-  { value: "starter", label: "Starter" },
+  { value: "FREE", label: "Free" },
+  { value: "BRONZE", label: "Bronze" },
+  { value: "SILVER", label: "Silver" },
+  { value: "GOLD", label: "Gold" },
+  { value: "ENTERPRISE", label: "Enterprise" },
 ];
 
 const EMPLOYEE_OPTIONS = [
-  { value: "1-10", label: "1-10" },
-  { value: "11-50", label: "11-50" },
-  { value: "51-100", label: "51-100" },
-  { value: "100+", label: "100+" },
+  { value: 10, label: "1-10" },
+  { value: 50, label: "11-50" },
+  { value: 100, label: "51-100" },
+  { value: 150, label: "101-150" },
+  { value: 200, label: "150+" },
 ];
 
-const COUNTRY_CODES = [
-  { value: "+44", label: "🇬🇧 +44" },
-  { value: "+1", label: "🇺🇸 +1" },
-  { value: "+91", label: "🇮🇳 +91" },
-  // Add more as needed
-];
+// Initial empty values (user must fill)
+const INITIAL_VALUES = {
+  name: "",
+  contact: "",
+  email: "",
+  subscriptionPlan: "",
+  peopleLimit: "",
+};
 
 const BuyPackageForm = () => {
   const dispatch = useDispatch();
-  //   const [remiderDaysData, setRe    minderDaysData] = useState([]);
 
-  //   const getTimePeriodFunc = () => {
-  //     const data = {
-  //       apiEndpoint: PURCHASE_PLAN_API_ENDPOINT,
-  //     };
-  //     dispatch(addNewTechnicianByAdmin(data)).then((res) => {
-  //       if (res.type === "addNewTechnicianByAdmin/fulfilled") {
-  //         setReminderDaysData(res?.payload?.data?.reminderNumber[0]);
-  //       }
-  //     });
-  //   };
+  const handleCreateCompany = (values) => {
+    const payload = {
+      name: values.name,
+      contact: values.contact,
+      email: values.email,
+      subscriptionPlan: values.subscriptionPlan,
+      peopleLimit: values.peopleLimit,
+    };
 
-  //   useEffect(() => {
-  //     getTimePeriodFunc();
-  //   }, []);
+    const body = {
+      apiEndpoint: "/company/create",
+      requestData: JSON.stringify(payload),
+    };
 
-  //   const updateTimePeriodFunc = (values) => {
-  //     const data = {
-  //       apiEndpoint: PURCHASE_PLAN_API_ENDPOINT,
-  //       requestData: JSON.stringify(values),
-  //     };
-  //     dispatch(addNewTechnicianByAdmin(data)).then((res) => {
-  //       if (res.type === "addNewTechnicianByAdmin/fulfilled") {
-  //         getTimePeriodFunc();
-  //       }
-  //     });
-  //   };
+    dispatch(createCompany(body)).then((res) => {
+      if (res.type === "createCompany/fulfilled") {
+        console.log("Company created successfully ✅", res.payload);
+      }
+    });
+  };
 
   return (
-    <div className="flex align-center justify-center px-4 py-8 h-full m-3">
+    <div className="flex align-center justify-center px-2 py-2 h-full m-3">
       <div className="my-auto md:w-96 w-full">
-        <h3 className="w-full text-4xl font-bold ">Your Enterprise</h3>
+        <h3 className="w-full text-4xl font-bold">Your Enterprise</h3>
         <p className="text-gray-500 mb-4">
           Enter your company details and select package according to employees
         </p>
         <Formik
-          initialValues={PURCHASE_PLAN_INITIAL_VALUES}
+          initialValues={INITIAL_VALUES}
           validationSchema={PURCHASE_PLAN_VALIDATION_SCHEMA}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
+          onSubmit={(values) => handleCreateCompany(values)}
         >
           {({
             errors,
@@ -98,75 +96,85 @@ const BuyPackageForm = () => {
             handleChange,
             setFieldValue,
             handleSubmit,
+            isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit} className="space-y-5">
+              {/* Company Name */}
               <div className="space-y-2">
-                <Label htmlFor="companyName">Company Name</Label>
+                <Label htmlFor="name">Company Name</Label>
                 <Input
-                  id="companyName"
-                  name="companyName"
+                  id="name"
+                  name="name"
                   placeholder="Enter company name"
-                  value={values.companyName}
+                  value={values.name}
                   onChange={handleChange}
-                  className={`px-6 border border-gray-400 rounded-full h-12 pr-12 ${
-                    errors.email && touched.email ? "border-red-500" : ""
+                  className={`px-6 border rounded-full h-12 pr-12 ${
+                    errors.name && touched.name
+                      ? "border-red-500"
+                      : "border-gray-400"
                   }`}
                 />
-                {errors.companyName && touched.companyName && (
-                  <div className="text-red-500 text-sm ">
-                    {errors.companyName}
-                  </div>
+                {errors.name && touched.name && (
+                  <div className="text-red-500 text-sm">{errors.name}</div>
                 )}
               </div>
-              <div>
-                <Label htmlFor="contactNumber">Contact Number</Label>
-                <div className="">
-                  <div className="flex gap  -2 mt-2">
-                    <Select
-                      value={values.countryCode}
-                      onValueChange={(val) => setFieldValue("countryCode", val)}
-                    >
-                      <SelectTrigger className="w-max py-6 border-gray-400 rounded-full ">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {COUNTRY_CODES.map((code) => (
-                          <SelectItem key={code.value} value={code.value}>
-                            {code.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      id="contactNumber"
-                      name="contactNumber"
-                      placeholder="111 222 3333"
-                      value={values.contactNumber}
-                      onChange={handleChange}
-                      className={`px-6 border border-gray-400 rounded-full h-12 pr-12 ${
-                        errors.email && touched.email ? "border-red-500" : ""
-                      }`}
-                      type="tel"
-                    />
-                  </div>
-                  {errors.contactNumber && touched.contactNumber && (
-                    <div className="text-red-500 text-sm">
-                      {errors.contactNumber}
-                    </div>
-                  )}
-                </div>
-              </div>
+
+              {/* Contact (Phone Number) */}
               <div className="space-y-2">
-                <Label htmlFor="subscriptionPackage">
-                  Subscription Package
-                </Label>
+                <PhoneNumberInputField
+                  className={`${
+                    errors.contact && touched.contact
+                      ? "border-red-500"
+                      : "border-gray-400"
+                  }`}
+                  required={true}
+                  name="contact"
+                  value={values.contact}
+                  label="Phone Number"
+                  setFieldValue={setFieldValue}
+                  error={
+                    errors.contact && touched.contact ? errors.contact : ""
+                  }
+                />
+              </div>
+
+              {/* Email */}
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Enter email"
+                  value={values.email}
+                  onChange={handleChange}
+                  className={`px-6 border rounded-full h-12 pr-12 ${
+                    errors.email && touched.email
+                      ? "border-red-500"
+                      : "border-gray-400"
+                  }`}
+                />
+                {errors.email && touched.email && (
+                  <div className="text-red-500 text-sm">{errors.email}</div>
+                )}
+              </div>
+
+              {/* Subscription Plan */}
+              <div className="space-y-2">
+                <Label htmlFor="subscriptionPlan">Subscription Package</Label>
                 <Select
-                  value={values.subscriptionPackage}
+                  value={values.subscriptionPlan}
                   onValueChange={(val) =>
-                    setFieldValue("subscriptionPackage", val)
+                    setFieldValue("subscriptionPlan", val)
                   }
                 >
-                  <SelectTrigger className="w-full py-6 border-gray-400 rounded-full ">
+                  <SelectTrigger
+                    className={`w-full py-6 rounded-full ${
+                      errors.subscriptionPlan && touched.subscriptionPlan
+                        ? "border-red-500"
+                        : "border-gray-400"
+                    }`}
+                  >
                     <SelectValue placeholder="Select package" />
                   </SelectTrigger>
                   <SelectContent>
@@ -177,21 +185,27 @@ const BuyPackageForm = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.subscriptionPackage && touched.subscriptionPackage && (
+                {errors.subscriptionPlan && touched.subscriptionPlan && (
                   <div className="text-red-500 text-sm">
-                    {errors.subscriptionPackage}
+                    {errors.subscriptionPlan}
                   </div>
                 )}
               </div>
+
+              {/* People Limit */}
               <div className="space-y-2">
-                <Label htmlFor="employees">
-                  How Much License Do You Wanna Buy?
-                </Label>
+                <Label htmlFor="peopleLimit">Employees</Label>
                 <Select
-                  value={values.employees}
-                  onValueChange={(val) => setFieldValue("employees", val)}
+                  value={values.peopleLimit}
+                  onValueChange={(val) => setFieldValue("peopleLimit", val)}
                 >
-                  <SelectTrigger className="w-full py-6 border-gray-400 rounded-full ">
+                  <SelectTrigger
+                    className={`w-full py-6 rounded-full ${
+                      errors.peopleLimit && touched.peopleLimit
+                        ? "border-red-500"
+                        : "border-gray-400"
+                    }`}
+                  >
                     <SelectValue placeholder="Select no. of employees" />
                   </SelectTrigger>
                   <SelectContent>
@@ -202,11 +216,18 @@ const BuyPackageForm = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.employees && touched.employees && (
-                  <div className="text-red-500 text-sm">{errors.employees}</div>
+                {errors.peopleLimit && touched.peopleLimit && (
+                  <div className="text-red-500 text-sm">
+                    {errors.peopleLimit}
+                  </div>
                 )}
               </div>
-              <Button type="submit" className="w-full h-12 rounded-full">
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-12 rounded-full"
+              >
                 DONE
               </Button>
             </Form>
