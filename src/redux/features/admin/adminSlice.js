@@ -4,12 +4,14 @@ import {
   login,
   verfiyOtp,
   resendOtp,
+  createUser,
   newPassword,
   getAllUsers,
-  forgetPassword,
+  getAllPlans,
   createCompany,
-  createUser,
+  forgetPassword,
   getAllCompanies,
+  createPaymentIntent,
 } from "./adminApi";
 
 export const adminSlice = createSlice({
@@ -20,8 +22,8 @@ export const adminSlice = createSlice({
     token: null,
     error: null,
     success: null,
-    loading: "idle",
     userRole: null,
+    loading: "idle",
   },
   reducers: {
     customLogout: (state) => {
@@ -32,6 +34,10 @@ export const adminSlice = createSlice({
       state.loading = "idle";
       state.userRole = null;
     },
+
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,8 +46,10 @@ export const adminSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.user = action?.payload?.data?.user;
-        state.token = action?.payload?.data?.accessToken;
+        if (action?.payload?.data?.user?.userRole === "SUPERADMIN") {
+          state.user = action?.payload?.data?.user;
+          state.token = action?.payload?.data?.accessToken;
+        }
         state.userRole = action?.payload?.data?.user?.userRole;
       })
       .addCase(login.rejected, (state) => {
@@ -118,8 +126,26 @@ export const adminSlice = createSlice({
       })
       .addCase(createUser.rejected, (state) => {
         state.loading = "failed";
+      })
+      .addCase(getAllPlans.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(getAllPlans.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(getAllPlans.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(createPaymentIntent.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(createPaymentIntent.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(createPaymentIntent.rejected, (state) => {
+        state.loading = "failed";
       });
   },
 });
-export const { customLogout } = adminSlice.actions;
+export const { customLogout, setToken } = adminSlice.actions;
 export default adminSlice.reducer;

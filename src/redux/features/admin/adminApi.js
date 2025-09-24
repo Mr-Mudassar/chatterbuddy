@@ -124,6 +124,46 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const getAllPlans = createAsyncThunk(
+  "getAllPlans",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);
+
+export const createPaymentIntent = createAsyncThunk(
+  "createPaymentIntent",
+  async ({ apiEndpoint, requestData, token }, thunkAPI) => {
+    try {
+      const config = token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`, // 👈 override global token
+            },
+          }
+        : {}; // use default if no token provided
+
+      const response = await axiosInstance.put(
+        apiEndpoint,
+        requestData,
+        config
+      );
+
+      toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response?.status });
+    }
+  }
+);
+
 export const deleteTechnicianByAdmin = createAsyncThunk(
   "deleteTechnicianByAdmin",
   async ({ apiEndpoint }, thunkAPI) => {

@@ -21,7 +21,13 @@ const SignInForm = () => {
 
     dispatch(login(data)).then((res) => {
       if (res?.type === "login/fulfilled") {
-        navigate("/admin/dashboard");
+        console.log("response from the login api in login form comp", res);
+
+        navigate("/choosePlan", {
+          state: {
+            accessToken: res?.payload?.data?.accessToken,
+          },
+        });
       }
     });
   };

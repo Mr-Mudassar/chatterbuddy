@@ -25,7 +25,7 @@ const PhoneInputField = (props) => {
     <div className="w-full m-0 ">
       <label
         htmlFor="input"
-        className="font-semibold mb-1 flex gap-x-1 text-gray-900"
+        className="font-semibold mb-1 text-sm flex gap-x-1 text-gray-900"
       >
         {label}
       </label>

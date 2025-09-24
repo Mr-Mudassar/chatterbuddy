@@ -10,10 +10,16 @@ import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/components/ui/button";
-import React from "react";
-import { createCompany } from "@/redux/features/admin/adminApi";
+import React, { useEffect, useState } from "react";
+import {
+  createCompany,
+  createPaymentIntent,
+  getAllPlans,
+} from "@/redux/features/admin/adminApi";
 import PhoneNumberInputField from "@/Components/PhoneNumberInputField";
 import * as Yup from "yup";
+import { useLocation } from "react-router-dom";
+import { setToken } from "@/redux/features/admin/adminSlice";
 
 // Validation schema with Yup
 const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
@@ -55,24 +61,68 @@ const INITIAL_VALUES = {
 
 const BuyPackageForm = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [allSubscriptionPlans, setAllSubscriptionPlans] = useState([]);
 
-  const handleCreateCompany = (values) => {
-    const payload = {
-      name: values.name,
-      contact: values.contact,
-      email: values.email,
-      subscriptionPlan: values.subscriptionPlan,
-      peopleLimit: values.peopleLimit,
-    };
+  useEffect(() => {
+    if (location?.state?.accessToken) {
+      // INITIAL_VALUES.name = location?.state?.companyName;
+    }
+  }, []);
 
+  // const handleCreateCompany = (values) => {
+  //   const payload = {
+  //     name: values.name,
+  //     contact: values.contact,
+  //     email: values.email,
+  //     subscriptionPlan: values.subscriptionPlan,
+  //     peopleLimit: values.peopleLimit,
+  //   };
+
+  //   const body = {
+  //     apiEndpoint: "/company/create",
+  //     requestData: JSON.stringify(payload),
+  //   };
+
+  //   dispatch(createCompany(body)).then((res) => {
+  //     if (res.type === "createCompany/fulfilled") {
+  //       console.log("Company created successfully ✅", res.payload);
+  //     }
+  //   });
+  // };
+
+  const FetchAllPlansFunc = () => {
     const body = {
-      apiEndpoint: "/company/create",
-      requestData: JSON.stringify(payload),
+      apiEndpoint: "/subscriptions/plans",
     };
+    dispatch(getAllPlans(body)).then((res) => {
+      if (res.type === "getAllPlans/fulfilled") {
+        console.log("response from the plans api", res);
+        setAllSubscriptionPlans(res.payload?.data);
+      }
+    });
+  };
 
-    dispatch(createCompany(body)).then((res) => {
-      if (res.type === "createCompany/fulfilled") {
-        console.log("Company created successfully ✅", res.payload);
+  useEffect(() => {
+    FetchAllPlansFunc();
+  }, []);
+
+  const CreatePaymentIntentFunc = (values) => {
+    const data = {
+      planId: values.subscriptionPlan,
+    };
+    const body = {
+      apiEndpoint: "/subscriptions/web-session",
+      requestData: JSON.stringify(data),
+      token: location?.state?.accessToken,
+    };
+    dispatch(createPaymentIntent(body)).then((res) => {
+      if (res.type === "createPaymentIntent/fulfilled") {
+        const redirectUrl = res.payload?.data?.url;
+        if (redirectUrl) {
+          dispatch(setToken(location?.state?.accessToken));
+          window.location.href = redirectUrl;
+        }
       }
     });
   };
@@ -87,7 +137,7 @@ const BuyPackageForm = () => {
         <Formik
           initialValues={INITIAL_VALUES}
           validationSchema={PURCHASE_PLAN_VALIDATION_SCHEMA}
-          onSubmit={(values) => handleCreateCompany(values)}
+          onSubmit={(values) => CreatePaymentIntentFunc(values)}
         >
           {({
             errors,
@@ -178,9 +228,12 @@ const BuyPackageForm = () => {
                     <SelectValue placeholder="Select package" />
                   </SelectTrigger>
                   <SelectContent>
-                    {SUBSCRIPTION_PACKAGES.map((pkg) => (
-                      <SelectItem key={pkg.value} value={pkg.value}>
-                        {pkg.label}
+                    {allSubscriptionPlans.map((pkg) => (
+                      <SelectItem
+                        key={pkg?.stripePriceId}
+                        value={pkg?.stripePriceId}
+                      >
+                        {pkg?.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
