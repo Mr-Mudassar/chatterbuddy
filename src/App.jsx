@@ -7,6 +7,7 @@ import { PublicRoute } from "./Routes/PublicRoutes";
 import { PrivateRoute } from "./Routes/PrivateRoutes";
 import LoadingScreen from "@/Components/LoadingScreen";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import NotFound from "@/Pages/NotFound";
 
 function withLayout(WrappedComponent) {
   const ComponentWithLayout = (props) => (
@@ -60,7 +61,7 @@ function App() {
             path="*"
             element={
               <Suspense fallback={<LoadingScreen />}>
-                <div className="h-screen w-screen flex justify-center items-center bg-red-200 ">
+                {/* <div className="h-screen w-screen flex justify-center items-center bg-red-200 ">
                   <div className="border border-red-700 px-28 py-10 rounded-sm">
                     <p className="text-2xl text-red-700 font-semibold mb-12">
                       Page Not Found
@@ -73,7 +74,8 @@ function App() {
                       Return to HOME page
                     </Link>
                   </div>
-                </div>
+                </div> */}
+                <NotFound />
               </Suspense>
             }
           />

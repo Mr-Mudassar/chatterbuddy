@@ -3,7 +3,7 @@ import Logo from "@/Assets/logo.png";
 import BgImage from "@/Assets/admin-auth-img.png";
 
 const AuthWrapper = (props) => {
-  const { AuthForm, imgDescription, imgHeading } = props;
+  const { AuthForm, imgDescription, imgHeading, bgImage = BgImage } = props;
   return (
     <div className="grid md:grid-cols-2 sm:grid-cols-1 min-h-screen overflow-hidden">
       <div className="h-full w-full flex flex-col justify-center items-center">
@@ -13,7 +13,7 @@ const AuthWrapper = (props) => {
       <div className="justify-center items-center m-3 md:block hidden">
         <div
           className="flex justify-center items-end h-full w-full bg-cover bg-center bg-no-repeat rounded-xl"
-          style={{ backgroundImage: `url(${BgImage})` }}
+          style={{ backgroundImage: `url(${bgImage})` }}
         >
           <div className="mb-4 mx-24">
             <h1

@@ -33,6 +33,7 @@ const routes = [
     isPublic: true,
     component: lazy(() => import("../Pages/Auth/BuyPackage/")),
   },
+  
 ]
   .concat(AdminRoutes)
   .concat(TechnicianRoutes);

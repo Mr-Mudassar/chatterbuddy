@@ -1,4 +1,5 @@
 import AuthWrapper from "@/Components/AuthWrapper";
+import ThirdImage from "@/Assets/image-3.png";
 import SetPasswordForm from "@/Components/Forms/SetPasswordForm";
 
 const ResetPassword = () => {
@@ -6,6 +7,7 @@ const ResetPassword = () => {
     <div className="">
       <div className="">
         <AuthWrapper
+          bgImage={ThirdImage}
           AuthForm={SetPasswordForm}
           headingText="Set New Password!"
         />

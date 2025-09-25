@@ -14,10 +14,28 @@ const TechnicianRoutes = [
     component: lazy(() => import("@/Pages/Enterprise/Dashboard")),
   },
   {
-    isPublic: false,
+    isPublic: true,
     role: "ADMIN",
     path: "/subscriptions",
     component: lazy(() => import("@/Pages/Enterprise/SubscriptionPlans")),
+  },
+  {
+    isPublic: true,
+    role: "ADMIN",
+    path: "/changePlan",
+    component: lazy(() => import("@/Pages/EnterPrise/ChangePlan")),
+  },
+  {
+    isPublic: true,
+    role: "ADMIN",
+    path: "/paymentSuccessfull",
+    component: lazy(() => import("@/Pages/Enterprise/PaymentSuccessfull")),
+  },
+  {
+    isPublic: true,
+    role: "ADMIN",
+    path: "/profileSetting",
+    component: lazy(() => import("@/Pages/Enterprise/ProfileSettings")),
   },
 ];
 
