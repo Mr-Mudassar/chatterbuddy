@@ -1,7 +1,8 @@
 import Loader from "@/Assets/loader.gif";
+
 const LoadingScreen = () => (
-  <div>
-    <img alt="loader" src={Loader} className={"fixed top-1/2 left-1/2 z-50"} />
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-white">
+    <img alt="loader" src={Loader} className="w-44 h-44" />
   </div>
 );
 
