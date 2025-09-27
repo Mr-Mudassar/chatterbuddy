@@ -6,7 +6,6 @@ export function PrivateRoute({ Component, props, role }) {
   const navigate = useNavigate();
   // state shape uses adminSlice reducer
   const { user } = useSelector((state) => state?.user);
-  console.log("Role props", role, user);
 
   useEffect(() => { 
     if (!user) {

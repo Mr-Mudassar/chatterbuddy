@@ -10,12 +10,6 @@ import { Eye, EyeOff } from "lucide-react";
 
 // ✅ Validation schema with Yup
 const REGISTER_VALIDATION_SCHEMA = Yup.object().shape({
-  firstName: Yup.string()
-    .required("First name is required")
-    .min(2, "First name must be at least 2 characters"),
-  lastName: Yup.string()
-    .required("Last name is required")
-    .min(2, "Last name must be at least 2 characters"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
@@ -30,8 +24,6 @@ const REGISTER_VALIDATION_SCHEMA = Yup.object().shape({
 
 // ✅ Initial values
 const INITIAL_VALUES = {
-  firstName: "",
-  lastName: "",
   email: "",
   password: "",
 };
@@ -43,8 +35,6 @@ const CreateUserForm = ({ onSuccess }) => {
   const toggleShowPassword = () => setShowPassword((s) => !s);
   const handleRegister = (values) => {
     const payload = {
-      firstName: values.firstName,
-      lastName: values.lastName,
       email: values.email,
       password: values.password,
       providerId: Date.now().toString(),
@@ -77,46 +67,6 @@ const CreateUserForm = ({ onSuccess }) => {
         >
           {({ errors, values, touched, handleChange, handleSubmit }) => (
             <Form onSubmit={handleSubmit} className="space-y-5">
-              {/* First Name */}
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="Enter first name"
-                  value={values.firstName}
-                  onChange={handleChange}
-                  className={`px-6 border rounded-full h-12 pr-12 ${
-                    errors.firstName && touched.firstName
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  }`}
-                />
-                {errors.firstName && touched.firstName && (
-                  <div className="text-red-500 text-sm">{errors.firstName}</div>
-                )}
-              </div>
-
-              {/* Last Name */}
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Enter last name"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  className={`px-6 border rounded-full h-12 pr-12 ${
-                    errors.lastName && touched.lastName
-                      ? "border-red-500"
-                      : "border-gray-400"
-                  }`}
-                />
-                {errors.lastName && touched.lastName && (
-                  <div className="text-red-500 text-sm">{errors.lastName}</div>
-                )}
-              </div>
-
               {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -168,7 +118,7 @@ const CreateUserForm = ({ onSuccess }) => {
                 )}
               </div>
 
-              <Button type="submit" className="w-full h-12 rounded-full">
+              <Button type="submit" className="w-full h-12 rounded-full mt-4 mb-8">
                 Register
               </Button>
             </Form>

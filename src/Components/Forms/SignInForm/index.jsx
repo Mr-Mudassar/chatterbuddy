@@ -21,13 +21,17 @@ const SignInForm = () => {
 
     dispatch(login(data)).then((res) => {
       if (res?.type === "login/fulfilled") {
-        console.log("response from the login api in login form comp", res);
-
-        navigate("/choosePlan", {
-          state: {
-            accessToken: res?.payload?.data?.accessToken,
-          },
-        });
+        if (res?.payload?.data?.user?.userRole === "SUPERADMIN") {
+          navigate("/admin/dashboard");
+        } else {
+          if (!res?.payload?.data?.user?.onboardingCompleted) {
+            navigate("/choosePlan", {
+              state: {
+                accessToken: res?.payload?.data?.accessToken,
+              },
+            });
+          }
+        }
       }
     });
   };

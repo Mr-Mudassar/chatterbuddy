@@ -5,14 +5,13 @@ import { useNavigate } from "react-router-dom";
 export function PublicRoute({ Component, props, role }) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  console.log("Role props public", role, user);
 
   useLayoutEffect(() => {
     if (user) {
-      user.role === "SUPERADMIN"
+      user?.role === "SUPERADMIN"
         ? navigate("/admin/dashboard")
-        : user.role === "ADMIN"
-        ? navigate("/dashboard")
+        : user?.role === "ADMIN"
+        ? navigate("/enterprise/dashboard")
         : navigate("/");
     }
   }, [user, navigate]);

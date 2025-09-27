@@ -27,7 +27,6 @@ const initializeAxiosInterceptors = async () => {
       }
 
       const token = store.getState()?.user?.token;
-      console.log("token in interceptor", token);
 
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;

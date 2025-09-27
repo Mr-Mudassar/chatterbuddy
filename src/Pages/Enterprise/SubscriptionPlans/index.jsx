@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  getCurrentPlan,
+  subscriptionHistory,
+} from "@/redux/features/admin/adminApi";
+import { StatusComponent } from "@/lib/function";
 
 const subscriptions = [
   {
@@ -32,8 +39,44 @@ const subscriptions = [
 ];
 
 export default function SubscriptionPlans() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [currentPlanData, setCurrentPlanData] = useState();
+  const [subcriptionHistoryData, setSubscriptionHistoryData] = useState([]);
+
+  const getCurrentPlanFunc = () => {
+    const data = {
+      apiEndpoint: "/subscriptions/status",
+    };
+
+    dispatch(getCurrentPlan(data)).then((res) => {
+      if (res?.type === "getCurrentPlan/fulfilled") {
+        setCurrentPlanData(res.payload.data);
+      }
+    });
+  };
+
+  const getSubscriptionHistory = () => {
+    const data = {
+      apiEndpoint: "/subscriptions/getSubscriptionHistorys",
+    };
+
+    dispatch(subscriptionHistory(data)).then((res) => {
+      if (res?.type === "subscriptionHistory/fulfilled") {
+        console.log("response from subscription history api", res);
+        setSubscriptionHistoryData(res?.payload?.data?.history);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getCurrentPlanFunc();
+    getSubscriptionHistory();
+  }, []);
+
   return (
-    <div className="rounded-lg shadow-lg border p-4">
+    <div className="rounded-lg shadow-lg border p-2 md:p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Current Subscription */}
         <div className="border-r pr-8">
@@ -46,14 +89,17 @@ export default function SubscriptionPlans() {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>
-                  Enterprise <span className="text-muted-foreground">Plan</span>
+                  {currentPlanData?.plan}{" "}
+                  <span className="text-muted-foreground">Plan</span>
                   <br />
                   <span className="text-sm font-normal text-muted-foreground">
                     1 - 70 Employees
                   </span>
                 </span>
                 <span className="text-2xl font-bold">
-                  $7,000
+                  <span className="text-4xl font-bold text-gray-600">
+                    ${currentPlanData?.monthlyPrice}
+                  </span>
                   <span className="text-sm font-normal text-muted-foreground">
                     /Month
                   </span>
@@ -61,17 +107,47 @@ export default function SubscriptionPlans() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <div>
+              <div className="flex justify-between items-center w-full">
                 <p className="text-sm font-medium">
-                  Expiry Date: <span className="font-semibold">04/25/2025</span>
+                  Expiry Date:{" "}
+                  <span className="font-semibold">
+                    {currentPlanData?.currentPeriodEnd
+                      ? new Date(
+                          currentPlanData.currentPeriodEnd
+                        ).toLocaleDateString("en-US", {
+                          month: "2-digit",
+                          day: "2-digit",
+                          year: "numeric",
+                        })
+                      : ""}
+                  </span>
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Days Left: <span className="font-semibold">5 Days Left</span>
+                  Days Left:{" "}
+                  <span className="font-semibold">
+                    {currentPlanData?.currentPeriodEnd
+                      ? Math.max(
+                          0,
+                          Math.ceil(
+                            (new Date(currentPlanData.currentPeriodEnd) -
+                              new Date()) /
+                              (1000 * 60 * 60 * 24)
+                          )
+                        ) + " Days Left"
+                      : ""}
+                  </span>
                 </p>
               </div>
             </CardContent>
-            <Button className="h-12 rounded-full cursor-pointer w-max ml-6">
-              change Plan
+            <Button
+              className="h-12 rounded-full cursor-pointer w-max ml-6"
+              onClick={() => {
+                navigate("/enterprise/changeplan", {
+                  state: { currentPlanOrder: currentPlanData?.order },
+                });
+              }}
+            >
+              Change Plan
             </Button>
           </Card>
         </div>
@@ -82,29 +158,49 @@ export default function SubscriptionPlans() {
           <Separator className="my-4" />
 
           <div className="space-y-4">
-            {subscriptions.map((sub, idx) => (
+            {subcriptionHistoryData?.map((sub, idx) => (
               <div
                 key={idx}
                 className="flex items-start justify-between border-b pb-3 last:border-none"
               >
                 <div className="space-y-1">
-                  <p className="font-medium flex items-center gap-2">
-                    <span className={`h-2 w-2 rounded-full ${sub.color}`} />
-                    {sub.plan}
+                  <p className="font-medium flex items-center">
+                    <span className={`h-3 w-3 mr-2 rounded-full bg-primary `} />
+                    {sub?.plan}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Licenses: {sub.licenses}
+                    Price: {sub?.monthlyPrice}
                     <br />
-                    Subscription date: {sub.subscriptionDate}
+                    Subscription date:{" "}
+                    <span className="font-semibold">
+                      {sub?.currentPeriodStart
+                        ? new Date(sub?.currentPeriodStart).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "2-digit",
+                              day: "2-digit",
+                              year: "numeric",
+                            }
+                          )
+                        : ""}
+                    </span>
                     <br />
-                    Expiration date: {sub.expiryDate}
+                    Expiration date:{" "}
+                    <span className="font-semibold">
+                      {sub?.currentPeriodEnd
+                        ? new Date(sub?.currentPeriodEnd).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "2-digit",
+                              day: "2-digit",
+                              year: "numeric",
+                            }
+                          )
+                        : ""}
+                    </span>
                   </p>
                 </div>
-                {sub.status === "active" ? (
-                  <Badge className="bg-green-100 text-green-700">Active</Badge>
-                ) : (
-                  <Badge className="bg-red-100 text-red-700">Expired</Badge>
-                )}
+                <span>{StatusComponent(sub?.isActive)}</span>
               </div>
             ))}
           </div>

@@ -7,11 +7,16 @@ import {
   createUser,
   newPassword,
   getAllUsers,
+  changePlan,
   getAllPlans,
   createCompany,
   forgetPassword,
+  getCurrentPlan,
   getAllCompanies,
   createPaymentIntent,
+  subscriptionHistory,
+  enterpriseNewPassword,
+  updateEnterpriseProfile,
 } from "./adminApi";
 
 export const adminSlice = createSlice({
@@ -46,11 +51,16 @@ export const adminSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        if (action?.payload?.data?.user?.userRole === "SUPERADMIN") {
+        if (action?.payload?.data?.user?.role === "SUPERADMIN") {
           state.user = action?.payload?.data?.user;
           state.token = action?.payload?.data?.accessToken;
+        } else {
+          if (action?.payload?.data?.user?.onboardingCompleted) {
+            state.user = action?.payload?.data?.user;
+            state.token = action?.payload?.data?.accessToken;
+          }
         }
-        state.userRole = action?.payload?.data?.user?.userRole;
+        state.userRole = action?.payload?.data?.user?.role;
       })
       .addCase(login.rejected, (state) => {
         state.loading = "failed";
@@ -143,6 +153,51 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(createPaymentIntent.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(getCurrentPlan.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(getCurrentPlan.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(getCurrentPlan.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(changePlan.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(changePlan.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(changePlan.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(enterpriseNewPassword.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(enterpriseNewPassword.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(enterpriseNewPassword.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(subscriptionHistory.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(subscriptionHistory.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(subscriptionHistory.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(updateEnterpriseProfile.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(updateEnterpriseProfile.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(updateEnterpriseProfile.rejected, (state) => {
         state.loading = "failed";
       });
   },

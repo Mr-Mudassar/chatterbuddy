@@ -31,9 +31,13 @@ const routes = [
   {
     path: "/choosePlan",
     isPublic: true,
-    component: lazy(() => import("../Pages/Auth/BuyPackage/")),
+    component: lazy(() => import("../Pages/Auth/BuyPackage")),
+  },  
+  {
+    path: "/enterprise-new-password/:token",
+    isPublic: true,
+    component: lazy(() => import("../Pages/Auth/EnterpriseNewPassword")),
   },
-  
 ]
   .concat(AdminRoutes)
   .concat(TechnicianRoutes);

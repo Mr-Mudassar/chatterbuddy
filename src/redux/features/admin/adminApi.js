@@ -192,3 +192,87 @@ export const createStripeIntent = createAsyncThunk(
     }
   }
 );
+
+export const getCurrentPlan = createAsyncThunk(
+  "getCurrentPlan",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);
+
+export const changePlan = createAsyncThunk(
+  "changePlan",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoint, requestData);
+      toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({
+        statusCode: error.response.status,
+      });
+    }
+  }
+);
+
+export const enterpriseNewPassword = createAsyncThunk(
+  "enterpriseNewPassword",
+  async ({ apiEndpoint, requestData, token }, thunkAPI) => {
+    try {
+      const config = token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`, // 👈 override global token
+            },
+          }
+        : {}; // use default if no token provided
+
+      const response = await axiosInstance.post(
+        apiEndpoint,
+        requestData,
+        config
+      );
+
+      toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response?.status });
+    }
+  }
+);
+
+export const subscriptionHistory = createAsyncThunk(
+  "subscriptionHistory",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);
+
+export const updateEnterpriseProfile = createAsyncThunk(
+  "updateEnterpriseProfile",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoint, requestData);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.data?.message);
+      return thunkAPI.rejectWithValue({
+        statusCode: error.response.status,
+      });
+    }
+  }
+);

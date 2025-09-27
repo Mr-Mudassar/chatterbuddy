@@ -13,10 +13,16 @@ import {
   SidebarGroupContent,
 } from "@/Components/ui/sidebar";
 import Logo from "@/Assets/logo.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Users, LayoutDashboard, Building, LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Users,
+  LayoutDashboard,
+  Building,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { customLogout } from "@/redux/features/admin/adminSlice";
 import toast from "react-hot-toast";
 
@@ -26,16 +32,31 @@ const adminNavigation = [
   { name: "User Management", href: "/admin/usersManagement", icon: Users },
 ];
 
+const enterpriseNavigation = [
+  { name: "Dashboard", href: "/enterprise/dashboard", icon: LayoutDashboard },
+  { name: "My Enterprise", href: "/enterprise/my-enterprise", icon: Users },
+  {
+    name: "Subscription Management",
+    href: "/enterprise/subscriptions",
+    icon: LogOut,
+  },
+];
+
 export function AppSidebar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const pathname = location.pathname;
-  const [loadingPath, setLoadingPath] = useState(null);
+  const { userRole } = useSelector((state) => state?.user);
+  // const { user } = useSelector((state) => state?.user);
 
   const CustomLogout = () => {
     dispatch(customLogout());
     toast.success("Logged out successfully");
   };
+
+  const AllNavigation =
+    userRole === "SUPERADMIN" ? adminNavigation : enterpriseNavigation;
   // const { isMobile, setOpenMobile } = useSidebar();
   // const [loadingPath, setLoadingPath] = (useState < string) | (null > null);
 
@@ -66,11 +87,11 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-2 mb-2">
-            Administration
+            {userRole === "SUPERADMIN" ? "Administration" : "Enterprise"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {adminNavigation.map((item) => {
+              {AllNavigation.map((item) => {
                 const isActive = pathname === item.href;
 
                 return (
@@ -106,7 +127,14 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <div
-          className="flex items-center gap-2 mx-2 mb-2 hover:cursor-pointer hover:bg-red-100 px-4 py-3 rounded-md"
+          className="flex items-center gap-2 mx-2 hover:cursor-pointer hover:bg-gray-200 px-4 py-3 rounded-full"
+          onClick={() => navigate("/profile-settings")}
+        >
+          <Settings className="h-4 w-4 text-gray-500" />
+          <p className="text-gray-700 font-semibold">Profile Settings</p>
+        </div>
+        <div
+          className="flex items-center gap-2 mx-2 mb-2 hover:cursor-pointer hover:bg-red-100 px-4 py-3 rounded-full"
           onClick={() => CustomLogout()}
         >
           <LogOut className="h-4 w-4 text-red-700" />

@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/Components/ui/dialog";
 import BuyPackageForm from "@/Components/Forms/BuyPackageForm";
 import { StatusComponent } from "@/lib/function";
+import CreateEnterpriseForm from "@/Components/Forms/CreateEnterpriseForm";
 
 const EnterpriseListing = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,11 @@ const EnterpriseListing = () => {
   useEffect(() => {
     GetAllCompaniesFunc();
   }, []);
+
+  const OnSuccessFunc = () => {
+    GetAllCompaniesFunc();
+    setCreateCompanyModal(false);
+  };
 
   const allCompaniesHeading = [
     {
@@ -101,7 +107,7 @@ const EnterpriseListing = () => {
         onOpenChange={() => setCreateCompanyModal(!createCompanyModal)}
       >
         <DialogContent className="max-h-[90vh] overflow-y-scroll">
-          <BuyPackageForm />
+          <CreateEnterpriseForm onSucess={OnSuccessFunc} />
         </DialogContent>
       </Dialog>
     </div>

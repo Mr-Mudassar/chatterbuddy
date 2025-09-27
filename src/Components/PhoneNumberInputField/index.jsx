@@ -33,7 +33,7 @@ const PhoneInputField = (props) => {
         inputProps={{
           name: name,
           required: required,
-          className: `py-3 w-full !bg-white pl-12 rounded-full transition-all focus:outline-none ${className} text-gray-900 border-1 border-gray-400 hover:ring-[#00B48D] hover:ring-opacity-30 focus:border-[#00B48D] focus:ring-[#00B48D] focus:ring-2 focus:ring-opacity-30 focus-visible:outline-none focus-visible:border-[#00B48D] focus-visible:ring-opacity-30`,
+          className: `py-3 w-full !bg-white pl-12 rounded-full transition-all focus:outline-none ${className} text-gray-900 !border-1 !border-gray-200 hover:ring-[#00B48D] hover:ring-opacity-30 focus:border-[#00B48D] focus:ring-[#00B48D] focus:ring-2 focus:ring-opacity-30 focus-visible:outline-none focus-visible:border-[#00B48D] focus-visible:ring-opacity-30`,
         }}
         country={"us"}
         onlyCountries={["us"]}
@@ -41,7 +41,7 @@ const PhoneInputField = (props) => {
         masks={{ us: "... - ... - ...." }}
         value={tempValue}
         onChange={handleInputChange}
-  className={`mt-1 flex items-center w-full text-gray-900 custom-phone-input rounded-full border border-gray-400 transition-all hover:ring-[#00B48D] hover:ring-opacity-30 focus:outline-none focus:border-[#00B48D] focus:ring-[#00B48D] focus:ring-2 focus:ring-opacity-30 focus-visible:outline-none focus-visible:border-[#00B48D] focus-visible:ring-opacity-30`}
+  className={`mt-1 flex items-center w-full text-gray-900 custom-phone-input rounded-full !border-1 !border-gray-200 transition-all hover:ring-[#00B48D] hover:ring-opacity-30 focus:outline-none focus:border-[#00B48D] focus:ring-[#00B48D] focus:ring-2 focus:ring-opacity-30 focus-visible:outline-none focus-visible:border-[#00B48D] focus-visible:ring-opacity-30`}
       ></PhoneInput>
 
       {error && <p className="text-red-600 text-xs">{error}</p>}

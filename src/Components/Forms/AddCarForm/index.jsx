@@ -128,8 +128,6 @@ const AddCarForm = (props) => {
     dispatch(readPdfFileForAutoFilling(data))
       .then((res) => {
         if (res.type === "readPdfFileForAutoFilling/fulfilled") {
-          console.log(res.payload);
-
           if (res?.payload?.data?.vin_number) {
             searchDetailsByVinNumber(
               res?.payload?.data?.vin_number,

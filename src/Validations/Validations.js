@@ -21,6 +21,8 @@ const newPasswordValidation = Yup.string()
   )
   .required("Password required");
 
+
+
 const phoneValidation = Yup.string()
   .matches(/^[0-9]{1,15}$/, "Phone number is not valid")
   .required("Phone number is required");
@@ -156,3 +158,8 @@ export const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
   subscriptionPackage: generalTextValidation,
   employees: generalTextValidation,
 });
+
+
+export const Enterprise_New_Password = Yup.object().shape({
+  password: newPasswordValidation
+})

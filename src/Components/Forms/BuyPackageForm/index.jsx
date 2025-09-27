@@ -6,13 +6,12 @@ import {
   SelectContent,
 } from "@/Components/ui/select";
 import { Form, Formik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import {
-  createCompany,
   createPaymentIntent,
   getAllPlans,
 } from "@/redux/features/admin/adminApi";
@@ -34,14 +33,6 @@ const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
   peopleLimit: Yup.string().required("Please select number of employees"),
 });
 
-const SUBSCRIPTION_PACKAGES = [
-  { value: "FREE", label: "Free" },
-  { value: "BRONZE", label: "Bronze" },
-  { value: "SILVER", label: "Silver" },
-  { value: "GOLD", label: "Gold" },
-  { value: "ENTERPRISE", label: "Enterprise" },
-];
-
 const EMPLOYEE_OPTIONS = [
   { value: 10, label: "1-10" },
   { value: 50, label: "11-50" },
@@ -62,34 +53,14 @@ const INITIAL_VALUES = {
 const BuyPackageForm = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { userRole } = useSelector((state) => state?.user);
   const [allSubscriptionPlans, setAllSubscriptionPlans] = useState([]);
 
-  useEffect(() => {
-    if (location?.state?.accessToken) {
-      // INITIAL_VALUES.name = location?.state?.companyName;
-    }
-  }, []);
-
-  // const handleCreateCompany = (values) => {
-  //   const payload = {
-  //     name: values.name,
-  //     contact: values.contact,
-  //     email: values.email,
-  //     subscriptionPlan: values.subscriptionPlan,
-  //     peopleLimit: values.peopleLimit,
-  //   };
-
-  //   const body = {
-  //     apiEndpoint: "/company/create",
-  //     requestData: JSON.stringify(payload),
-  //   };
-
-  //   dispatch(createCompany(body)).then((res) => {
-  //     if (res.type === "createCompany/fulfilled") {
-  //       console.log("Company created successfully ✅", res.payload);
-  //     }
-  //   });
-  // };
+  // useEffect(() => {
+  //   if (!location.state?.accessToken) {
+  //     toast.error("Please login first");
+  //   }
+  // }, []);
 
   const FetchAllPlansFunc = () => {
     const body = {
@@ -97,7 +68,6 @@ const BuyPackageForm = () => {
     };
     dispatch(getAllPlans(body)).then((res) => {
       if (res.type === "getAllPlans/fulfilled") {
-        console.log("response from the plans api", res);
         setAllSubscriptionPlans(res.payload?.data);
       }
     });
@@ -249,7 +219,7 @@ const BuyPackageForm = () => {
               <div className="space-y-2">
                 <Label htmlFor="peopleLimit">Employees</Label>
                 <Select
-                  value={values.peopleLimit}
+                  value={values?.peopleLimit}
                   onValueChange={(val) => setFieldValue("peopleLimit", val)}
                 >
                   <SelectTrigger

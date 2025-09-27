@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { changePlan, getAllPlans } from "@/redux/features/admin/adminApi";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // Dummy subscription plans
 const plans = [
@@ -20,7 +24,61 @@ const plans = [
 ];
 
 export default function ChangePlan() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [allSubscriptionPlans, setAllSubscriptionPlans] = useState([]);
+
+  const FetchAllPlansFunc = () => {
+    const body = {
+      apiEndpoint: "/subscriptions/plans",
+    };
+    dispatch(getAllPlans(body)).then((res) => {
+      if (res.type === "getAllPlans/fulfilled") {
+        setAllSubscriptionPlans(res.payload?.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!location?.state?.currentPlanOrder) {
+      navigate("/enterprise/subscriptions");
+      toast.error("Please click on the change plan to change your plan");
+    }
+    FetchAllPlansFunc();
+  }, []);
+
+  const ChangePlanFunc = () => {
+    let data;
+    if (location?.state?.currentPlanOrder <= selectedPlan?.displayOrder) {
+      data = {
+        apiEndpoint: "/subscriptions/upgrade",
+        requestData: {
+          newPlan: selectedPlan?.name,
+        },
+      };
+    } else {
+      data = {
+        apiEndpoint: "/subscriptions/downgrade",
+        requestData: {
+          newPlan: selectedPlan?.name,
+        },
+      };
+    }
+
+    dispatch(changePlan(data)).then((res) => {
+      if (res.type === "changePlan/fulfilled") {
+        const redirectUrl =
+          res.payload?.data?.paymentIntent?.checkoutSessionUrl;
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          navigate("/enterprise/subscriptions");
+        }
+      }
+    });
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg border p-4">
@@ -36,32 +94,30 @@ export default function ChangePlan() {
 
         {/* Plans */}
         <div className="space-y-4">
-          {plans.map((plan) => (
+          {allSubscriptionPlans?.map((plan) => (
             <Card
               key={plan.id}
-              onClick={() => setSelectedPlan(plan.id)}
+              onClick={() => setSelectedPlan(plan)}
               className={`cursor-pointer transition-all ${
-                plan.current
-                  ? "border-2 border-green-500"
-                  : selectedPlan === plan.id
+                selectedPlan?.id === plan.id
                   ? "border-2 border-primary"
                   : "hover:border-muted"
               }`}
             >
               <CardHeader className="flex flex-row justify-between items-center">
                 <div>
-                  <CardTitle className="text-base font-medium">
+                  <CardTitle className="text-base  font-medium">
                     {plan.name}{" "}
-                    <span className="text-muted-foreground font-normal">
+                    <span className="text-muted-foreground font-normal ml-1">
                       Plan
                     </span>
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">{plan.users}</p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold">
-                    ${plan.price.toLocaleString()}
+                <div className="flex items-end">
+                  <span className="text-4xl font-bold text-gray-600">
+                    ${plan.priceMonthly}
                   </span>
                   <span className="text-sm text-muted-foreground">/Month</span>
                   {plan.current && (
@@ -77,12 +133,14 @@ export default function ChangePlan() {
         <div className="flex justify-end items-center gap-4 pt-6">
           <Button
             variant="outline"
+            onClick={() => navigate("/enterprise/subscriptions")}
             className="h-12 rounded-full cursor-pointer"
           >
             Cancel
           </Button>
           <Button
             disabled={!selectedPlan}
+            onClick={ChangePlanFunc}
             className="h-12 rounded-full cursor-pointer"
           >
             Change Plan

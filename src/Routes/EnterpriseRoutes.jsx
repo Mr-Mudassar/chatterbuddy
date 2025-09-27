@@ -4,39 +4,46 @@ const TechnicianRoutes = [
   {
     isPublic: false,
     role: "ADMIN",
-    path: "/users",
-    component: lazy(() => import("@/Pages/Enterprise/MyUsers")),
+    path: "/enterprise/dashboard",
+    component: lazy(() => import("@/Pages/Enterprise/Dashboard")),
   },
   {
     isPublic: false,
     role: "ADMIN",
-    path: "/dashboard",
-    component: lazy(() => import("@/Pages/Enterprise/Dashboard")),
+    path: "/enterprise/my-enterprise",
+    component: lazy(() => import("@/Pages/Enterprise/MyEnterprise")),
   },
   {
-    isPublic: true,
+    isPublic: false,
     role: "ADMIN",
-    path: "/subscriptions",
+    path: "/enterprise/subscriptions",
     component: lazy(() => import("@/Pages/Enterprise/SubscriptionPlans")),
   },
   {
-    isPublic: true,
+    isPublic: false,
     role: "ADMIN",
-    path: "/changePlan",
+    path: "/enterprise/changePlan",
     component: lazy(() => import("@/Pages/EnterPrise/ChangePlan")),
   },
   {
-    isPublic: true,
+    isPublic: false,
     role: "ADMIN",
-    path: "/paymentSuccessfull",
+    path: "/enterprise/paymentSuccessfull",
     component: lazy(() => import("@/Pages/Enterprise/PaymentSuccessfull")),
   },
   {
-    isPublic: true,
+    isPublic: false,
     role: "ADMIN",
-    path: "/profileSetting",
-    component: lazy(() => import("@/Pages/Enterprise/ProfileSettings")),
+    path: "/enterprise/profileSetting",
+    component: lazy(() => import("@/Pages/ProfileSettings")),
   },
+  {
+    role: "ADMIN",
+    path: "/profile-settings",
+    isPublic: false,
+    component: lazy(() => import("../Pages/ProfileSettings")),
+  },
+
 ];
 
 export default TechnicianRoutes;
