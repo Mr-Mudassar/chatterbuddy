@@ -28,6 +28,7 @@ const SignInForm = () => {
             navigate("/choosePlan", {
               state: {
                 accessToken: res?.payload?.data?.accessToken,
+                userData: res?.payload?.data?.user,
               },
             });
           }

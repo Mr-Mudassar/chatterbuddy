@@ -22,6 +22,8 @@ import {
   Building,
   LogOut,
   Settings,
+  SubscriptIcon,
+  Gem,
 } from "lucide-react";
 import { customLogout } from "@/redux/features/admin/adminSlice";
 import toast from "react-hot-toast";
@@ -38,7 +40,7 @@ const enterpriseNavigation = [
   {
     name: "Subscription Management",
     href: "/enterprise/subscriptions",
-    icon: LogOut,
+    icon: Gem,
   },
 ];
 

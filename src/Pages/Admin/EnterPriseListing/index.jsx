@@ -106,7 +106,7 @@ const EnterpriseListing = () => {
         open={createCompanyModal}
         onOpenChange={() => setCreateCompanyModal(!createCompanyModal)}
       >
-        <DialogContent className="max-h-[90vh] overflow-y-scroll">
+        <DialogContent>
           <CreateEnterpriseForm onSucess={OnSuccessFunc} />
         </DialogContent>
       </Dialog>

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { changePlan, getAllPlans } from "@/redux/features/admin/adminApi";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { changePlan, getAllPlans } from "@/redux/features/admin/adminApi";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 // Dummy subscription plans
 const plans = [
@@ -56,6 +56,7 @@ export default function ChangePlan() {
         apiEndpoint: "/subscriptions/upgrade",
         requestData: {
           newPlan: selectedPlan?.name,
+          peoplelimit: selectedPlan?.peoplelimit,
         },
       };
     } else {
@@ -63,6 +64,7 @@ export default function ChangePlan() {
         apiEndpoint: "/subscriptions/downgrade",
         requestData: {
           newPlan: selectedPlan?.name,
+          peoplelimit: selectedPlan?.peoplelimit,
         },
       };
     }
@@ -106,13 +108,22 @@ export default function ChangePlan() {
             >
               <CardHeader className="flex flex-row justify-between items-center">
                 <div>
-                  <CardTitle className="text-base  font-medium">
-                    {plan.name}{" "}
-                    <span className="text-muted-foreground font-normal ml-1">
-                      Plan
-                    </span>
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">{plan.users}</p>
+                  <div>
+                    <CardTitle className="text-base  font-medium">
+                      {plan.name}{" "}
+                      <span className="text-muted-foreground font-normal ml-1">
+                        Plan
+                      </span>
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      {plan.users}
+                    </p>
+                  </div>
+                  <div className="">
+                    <p className="text-gray-500 font-semibold text-sm">
+                      {plan?.peoplelimit} Users
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex items-end">

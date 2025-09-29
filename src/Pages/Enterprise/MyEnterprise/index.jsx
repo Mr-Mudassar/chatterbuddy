@@ -15,7 +15,6 @@ const MyEnterprise = () => {
   const [createUserModal, setCreateUserModal] = useState(false);
 
   const { user } = useSelector((state) => state?.user);
-  console.log("User in my enterprise", user);
 
   const companyId = user?.company?.id;
   const GetAllUserByCompanyFunc = () => {
@@ -101,7 +100,7 @@ const MyEnterprise = () => {
         open={createUserModal}
         onOpenChange={() => setCreateUserModal(!createUserModal)}
       >
-        <DialogContent className="max-h-[90vh] overflow-y-scroll">
+        <DialogContent >
           <CreateUserForm onSuccess={OnSuccessFunc} />
         </DialogContent>
       </Dialog>

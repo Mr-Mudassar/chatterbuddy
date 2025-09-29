@@ -1,6 +1,6 @@
 import axios from "axios";
-import { customLogout } from "./features/admin/adminSlice";
 import toast from "react-hot-toast";
+import { customLogout } from "./features/admin/adminSlice";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BACKEND_BASE_URL,
@@ -45,7 +45,10 @@ const initializeAxiosInterceptors = async () => {
       const { response } = error;
       if (response && response.status === 401) {
         store.dispatch(customLogout());
-        toast.error(response?.data?.error?.detail || "Unauthorized");
+        toast.error(
+          response?.data?.error?.detail + "Error from interceptor" ||
+            "Unauthorized (Error from interceptor)"
+        );
       }
       return Promise.reject(error);
     }

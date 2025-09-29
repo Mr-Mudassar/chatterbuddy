@@ -1,9 +1,4 @@
 import React from "react";
-import UserBlue from "@/Assets/user-blue.png";
-import UserPurple from "@/Assets/user-purple.png";
-import UserYellow from "@/Assets/user-yellow.png";
-import { Card } from "../ui/card";
-import { ArrowUpRight } from "lucide-react";
 import LineChart from "../Charts/LineChart";
 import {
   Select,
@@ -15,29 +10,9 @@ import {
 import SubscriptionChart from "../Charts/DonutChart";
 import DataTable from "../DataTable";
 import { Link } from "react-router-dom";
+import DashboardCard from "./DashboardCard";
 
 const DashboardComponent = () => {
-  const DashboardCardData = [
-    {
-      value: 1500,
-      title: "Total Users",
-      image: UserPurple,
-      description: "Number of registered users",
-    },
-    {
-      value: 1500,
-      title: "Total Enterprise",
-      image: UserYellow,
-      description: "Number of registered users",
-    },
-    {
-      value: 1500,
-      title: "Active Users",
-      image: UserBlue,
-      description: "Number of registered users",
-    },
-  ];
-
   const TechnicianListingTableHeadings = [
     {
       name: "User ID",
@@ -103,28 +78,9 @@ const DashboardComponent = () => {
 
   return (
     <div className="space-y-4 ">
+      <DashboardCard />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {DashboardCardData.map((card, index) => (
-          <Card key={index} className="p-4 border-none  rounded-lg shadow-md  ">
-            <p className="text-lg text-black font-semibold">{card.title}</p>
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex gap-2 items-center">
-                <p className="text-5xl font-semibold ">{card.value}</p>
-                <ArrowUpRight className="h-7 w-7  text-green-500 mt-2" />
-              </div>
-              <img
-                src={card.image}
-                alt={card.title}
-                className="h-10 w-10 mr-4"
-              />
-            </div>
-            <p className="text-sm">{card.description}</p>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md h-full col-span-2">
+        <div className="bg-white p-4 rounded-lg shadow-md h-full col-span-2 border">
           <div className="flex  justify-between items-center">
             <p className="font-semibold text-lg">Overview</p>
             <Select onValueChange={(val) => setFieldValue("employees", val)}>
@@ -148,13 +104,13 @@ const DashboardComponent = () => {
             ]}
           />
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md h-full    ">
+        <div className="bg-white p-4 rounded-lg shadow-md h-full border ">
           <p className="font-semibold text-lg mb-2">Subscriptions</p>
           <SubscriptionChart />
         </div>
       </div>
 
-      <div className="rounded-lg shadow-md bg-white">
+      <div className="rounded-lg shadow-md bg-white  border">
         <div className="flex items-center justify-between px-6 py-4">
           <p className="font-semibold text-lg">User Listing</p>
           <Link to="/admin/employees" className="text-primary font-semibold">

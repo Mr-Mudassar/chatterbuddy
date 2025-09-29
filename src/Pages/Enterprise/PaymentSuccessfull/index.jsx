@@ -19,7 +19,7 @@ const PaymentSuccessfullComp = () => {
           </div>
           <Button
             className="w-full h-12 rounded-full cursor-pointer"
-            onClick={() => navigate("/enterprise/dashboard")}
+            onClick={() => navigate("/login")}
           >
             Done
           </Button>

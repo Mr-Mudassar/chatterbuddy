@@ -1,16 +1,11 @@
 import { Formik, Form } from "formik";
 import OtpInput from "react-otp-input";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  addNewTechnicianByAdmin,
-  resendOtp,
-  verfiyOtp,
-} from "@/redux/features/admin/adminApi";
+import { resendOtp, verfiyOtp } from "@/redux/features/admin/adminApi";
 import { VERIFY_OTP_INITIAL_VALUES } from "@/Validations/InitialValues";
 import { VERIFY_OTP_VALIDATION_SCHEMA } from "@/Validations/Validations";
-import { VERIFY_OTP_API_URL } from "@/lib/constants";
 import { Button } from "@/Components/ui/button";
 
 const OtpForm = () => {

@@ -1,49 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import {
   getCurrentPlan,
   subscriptionHistory,
 } from "@/redux/features/admin/adminApi";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { StatusComponent } from "@/lib/function";
-
-const subscriptions = [
-  {
-    plan: "Enterprise",
-    licenses: 70,
-    subscriptionDate: "03/25/2025",
-    expiryDate: "04/25/2025",
-    status: "active",
-    color: "bg-green-500",
-  },
-  {
-    plan: "Enterprise",
-    licenses: 50,
-    subscriptionDate: "03/25/2025",
-    expiryDate: "04/25/2025",
-    status: "expired",
-    color: "bg-blue-500",
-  },
-  {
-    plan: "Enterprise",
-    licenses: 10,
-    subscriptionDate: "03/25/2025",
-    expiryDate: "04/25/2025",
-    status: "expired",
-    color: "bg-purple-500",
-  },
-];
+import React, { useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingScreen from "@/Components/LoadingScreen";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default function SubscriptionPlans() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const loading = useSelector((state) => state?.user);
   const [currentPlanData, setCurrentPlanData] = useState();
   const [subcriptionHistoryData, setSubscriptionHistoryData] = useState([]);
+
+  if (loading === "pending") {
+    return <LoadingScreen />;
+  }
 
   const getCurrentPlanFunc = () => {
     const data = {
@@ -64,7 +41,6 @@ export default function SubscriptionPlans() {
 
     dispatch(subscriptionHistory(data)).then((res) => {
       if (res?.type === "subscriptionHistory/fulfilled") {
-        console.log("response from subscription history api", res);
         setSubscriptionHistoryData(res?.payload?.data?.history);
       }
     });
@@ -93,7 +69,7 @@ export default function SubscriptionPlans() {
                   <span className="text-muted-foreground">Plan</span>
                   <br />
                   <span className="text-sm font-normal text-muted-foreground">
-                    1 - 70 Employees
+                   {currentPlanData?.peoplelimit} Users
                   </span>
                 </span>
                 <span className="text-2xl font-bold">

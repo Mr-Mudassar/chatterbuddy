@@ -26,8 +26,8 @@ const TechnicianRoutes = [
     component: lazy(() => import("@/Pages/EnterPrise/ChangePlan")),
   },
   {
-    isPublic: false,
-    role: "ADMIN",
+    isPublic: true,
+    // role: "ADMIN",
     path: "/enterprise/paymentSuccessfull",
     component: lazy(() => import("@/Pages/Enterprise/PaymentSuccessfull")),
   },

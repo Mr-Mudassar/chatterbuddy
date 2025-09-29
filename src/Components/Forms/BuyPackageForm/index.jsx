@@ -22,32 +22,19 @@ import { setToken } from "@/redux/features/admin/adminSlice";
 
 // Validation schema with Yup
 const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
-  name: Yup.string().required("Company name is required"),
-  contact: Yup.string()
-    .required("Phone number is required")
-    .matches(/^[0-9+\- ]+$/, "Invalid phone number"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
+  // name: Yup.string().required("Company name is required"),
+  // contact: Yup.string()
+  //   .required("Phone number is required")
+  //   .matches(/^[0-9+\- ]+$/, "Invalid phone number"),
+  // email: Yup.string()
+  //   .email("Invalid email address")
+  //   .required("Email is required"),
   subscriptionPlan: Yup.string().required("Subscription plan is required"),
-  peopleLimit: Yup.string().required("Please select number of employees"),
 });
-
-const EMPLOYEE_OPTIONS = [
-  { value: 10, label: "1-10" },
-  { value: 50, label: "11-50" },
-  { value: 100, label: "51-100" },
-  { value: 150, label: "101-150" },
-  { value: 200, label: "150+" },
-];
 
 // Initial empty values (user must fill)
 const INITIAL_VALUES = {
-  name: "",
-  contact: "",
-  email: "",
   subscriptionPlan: "",
-  peopleLimit: "",
 };
 
 const BuyPackageForm = () => {
@@ -90,12 +77,13 @@ const BuyPackageForm = () => {
       if (res.type === "createPaymentIntent/fulfilled") {
         const redirectUrl = res.payload?.data?.url;
         if (redirectUrl) {
-          dispatch(setToken(location?.state?.accessToken));
           window.location.href = redirectUrl;
         }
       }
     });
   };
+
+  const userData = location?.state?.userData;
 
   return (
     <div className="flex align-center justify-center px-2 py-2 h-full m-3">
@@ -125,8 +113,9 @@ const BuyPackageForm = () => {
                 <Input
                   id="name"
                   name="name"
+                  disabled={true}
                   placeholder="Enter company name"
-                  value={values.name}
+                  value={userData?.company?.name}
                   onChange={handleChange}
                   className={`px-6 border rounded-full h-12 pr-12 ${
                     errors.name && touched.name
@@ -149,7 +138,8 @@ const BuyPackageForm = () => {
                   }`}
                   required={true}
                   name="contact"
-                  value={values.contact}
+                  disabled={true}
+                  value={userData?.company?.contact}
                   label="Phone Number"
                   setFieldValue={setFieldValue}
                   error={
@@ -165,8 +155,9 @@ const BuyPackageForm = () => {
                   id="email"
                   name="email"
                   type="email"
+                  disabled={true}
                   placeholder="Enter email"
-                  value={values.email}
+                  value={userData?.email}
                   onChange={handleChange}
                   className={`px-6 border rounded-full h-12 pr-12 ${
                     errors.email && touched.email
@@ -203,7 +194,8 @@ const BuyPackageForm = () => {
                         key={pkg?.stripePriceId}
                         value={pkg?.stripePriceId}
                       >
-                        {pkg?.name}
+                        {pkg?.name} ({pkg?.peoplelimit}) - ${pkg?.priceMonthly}
+                        /month
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -211,37 +203,6 @@ const BuyPackageForm = () => {
                 {errors.subscriptionPlan && touched.subscriptionPlan && (
                   <div className="text-red-500 text-sm">
                     {errors.subscriptionPlan}
-                  </div>
-                )}
-              </div>
-
-              {/* People Limit */}
-              <div className="space-y-2">
-                <Label htmlFor="peopleLimit">Employees</Label>
-                <Select
-                  value={values?.peopleLimit}
-                  onValueChange={(val) => setFieldValue("peopleLimit", val)}
-                >
-                  <SelectTrigger
-                    className={`w-full py-6 rounded-full ${
-                      errors.peopleLimit && touched.peopleLimit
-                        ? "border-red-500"
-                        : "border-gray-400"
-                    }`}
-                  >
-                    <SelectValue placeholder="Select no. of employees" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {EMPLOYEE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.peopleLimit && touched.peopleLimit && (
-                  <div className="text-red-500 text-sm">
-                    {errors.peopleLimit}
                   </div>
                 )}
               </div>

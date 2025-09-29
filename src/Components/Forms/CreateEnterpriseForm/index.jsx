@@ -43,7 +43,6 @@ const CreateEnterpriseForm = ({ onSucess }) => {
 
     dispatch(createCompany(body)).then((res) => {
       if (res.type === "createCompany/fulfilled") {
-        console.log("Company created successfully ✅", res.payload);
         onSucess();
       }
     });
