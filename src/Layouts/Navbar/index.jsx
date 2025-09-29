@@ -8,11 +8,8 @@ const Navbar = () => {
   const isSidebarCollapsed = state === "collapsed";
 
   return (
-    <header className="flex h-18 shrink-0 items-center justify-between pr-3 pl-1 bg-[#f6f6f6] gap-3">
-      {/* <div className="flex items-center space-x-2"> */}
+    <header className="flex h-18 shrink-0 items-center justify-between pr-3 pl-1 bg-[#f6f6f6] gap-3  ">
       <SidebarTrigger className="text-gray-700 bg-white h-12 w-12 shadow-md border" />
-
-      {/* </div> */}
       <Input
         placeholder="Search..."
         className="w-full h-12 py-6 border rounded-md bg-white shadow-md"

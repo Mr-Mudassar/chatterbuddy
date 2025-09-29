@@ -1,12 +1,12 @@
+import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import * as Yup from "yup";
 import { createCompany } from "@/redux/features/admin/adminApi";
-import { Eye, EyeOff } from "lucide-react";
 
 // ✅ Validation schema with Yup
 const REGISTER_VALIDATION_SCHEMA = Yup.object().shape({
@@ -30,9 +30,10 @@ const INITIAL_VALUES = {
 
 const CreateUserForm = ({ onSuccess }) => {
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state?.user);
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => setShowPassword((s) => !s);
+
   const handleRegister = (values) => {
     const payload = {
       email: values.email,
@@ -41,7 +42,7 @@ const CreateUserForm = ({ onSuccess }) => {
     };
 
     const body = {
-      apiEndpoint: "/company/create-company-user",
+      apiEndpoint: `/company/create-company-user/${user?.company?.id}`,
       requestData: JSON.stringify(payload),
     };
 

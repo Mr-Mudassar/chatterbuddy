@@ -13,6 +13,7 @@ import {
   forgetPassword,
   getCurrentPlan,
   getAllCompanies,
+  enterpriseStats,
   createPaymentIntent,
   subscriptionHistory,
   enterpriseNewPassword,
@@ -195,8 +196,10 @@ export const adminSlice = createSlice({
       .addCase(updateEnterpriseProfile.pending, (state) => {
         state.loading = "pending";
       })
-      .addCase(updateEnterpriseProfile.fulfilled, (state) => {
+      .addCase(updateEnterpriseProfile.fulfilled, (state, action) => {
         state.loading = "succeeded";
+        state.user = action?.payload?.data?.user;
+        state.token = action?.payload?.data?.accessToken;
       })
       .addCase(updateEnterpriseProfile.rejected, (state) => {
         state.loading = "failed";
@@ -208,6 +211,15 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(removeUserFromCompany.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(enterpriseStats.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(enterpriseStats.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(enterpriseStats.rejected, (state) => {
         state.loading = "failed";
       });
   },

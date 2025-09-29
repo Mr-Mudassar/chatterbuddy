@@ -252,7 +252,8 @@ export const updateEnterpriseProfile = createAsyncThunk(
   "updateEnterpriseProfile",
   async ({ apiEndpoint, requestData }, thunkAPI) => {
     try {
-      const response = await axiosInstance.post(apiEndpoint, requestData);
+      const response = await axiosInstance.put(apiEndpoint, requestData);
+      toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
       toast.error(error?.response?.data?.error?.message);
@@ -269,6 +270,19 @@ export const removeUserFromCompany = createAsyncThunk(
     try {
       const response = await axiosInstance.delete(apiEndpoint);
       toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.error?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);
+
+export const enterpriseStats = createAsyncThunk(
+  "enterpriseStats",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
       toast.error(error?.response?.data?.error?.message);
