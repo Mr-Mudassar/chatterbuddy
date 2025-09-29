@@ -1,5 +1,5 @@
 import axios from "axios";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { customLogout } from "./features/admin/adminSlice";
 
 const axiosInstance = axios.create({
@@ -45,10 +45,10 @@ const initializeAxiosInterceptors = async () => {
       const { response } = error;
       if (response && response.status === 401) {
         store.dispatch(customLogout());
-        toast.error(
-          response?.data?.error?.detail + "Error from interceptor" ||
-            "Unauthorized (Error from interceptor)"
-        );
+        // toast.error(
+        //   response?.data?.error?.detail + "Error from interceptor" ||
+        //     "Unauthorized (Error from interceptor)"
+        // );
       }
       return Promise.reject(error);
     }

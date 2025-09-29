@@ -25,12 +25,12 @@ const AdminRoutes = [
     path: "/admin/usersManagement",
     component: lazy(() => import("@/Pages/Admin/UserManagement")),
   },
-  // {
-  //   role: "SUPERADMIN",
-  //   path: "/profile-settings",
-  //   isPublic: false,
-  //   component: lazy(() => import("../Pages/ProfileSettings")),
-  // },
+  {
+    role: "SUPERADMIN",
+    path: "/admin/usersManagement/:id",
+    isPublic: false,
+    component: lazy(() => import("../Pages/Admin/UserManagement")),
+  },
 ];
 
 export default AdminRoutes;

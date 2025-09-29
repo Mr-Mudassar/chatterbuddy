@@ -16,6 +16,7 @@ import {
   createPaymentIntent,
   subscriptionHistory,
   enterpriseNewPassword,
+  removeUserFromCompany,
   updateEnterpriseProfile,
 } from "./adminApi";
 
@@ -198,6 +199,15 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(updateEnterpriseProfile.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(removeUserFromCompany.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(removeUserFromCompany.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(removeUserFromCompany.rejected, (state) => {
         state.loading = "failed";
       });
   },

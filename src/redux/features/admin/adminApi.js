@@ -10,7 +10,7 @@ export const login = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -24,7 +24,7 @@ export const forgetPassword = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -37,7 +37,7 @@ export const verfiyOtp = createAsyncThunk(
       const response = await axiosInstance.post(apiEndpoint, requestData);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -50,7 +50,7 @@ export const resendOtp = createAsyncThunk(
       const response = await axiosInstance.post(apiEndpoint, requestData);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -64,7 +64,7 @@ export const newPassword = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -77,7 +77,7 @@ export const getAllCompanies = createAsyncThunk(
       const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -91,7 +91,7 @@ export const createCompany = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -104,7 +104,7 @@ export const getAllUsers = createAsyncThunk(
       const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -118,7 +118,7 @@ export const createUser = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -131,7 +131,7 @@ export const getAllPlans = createAsyncThunk(
       const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -158,40 +158,26 @@ export const createPaymentIntent = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response?.status });
     }
   }
 );
 
-export const deleteTechnicianByAdmin = createAsyncThunk(
-  "deleteTechnicianByAdmin",
-  async ({ apiEndpoint }, thunkAPI) => {
-    try {
-      const response = await axiosInstance.delete(apiEndpoint);
-      toast.success(response?.data?.message);
-      return response.data;
-    } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
-      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
-    }
-  }
-);
-
-export const createStripeIntent = createAsyncThunk(
-  "createStripeIntent",
-  async ({ apiEndpoint, requestData }, thunkAPI) => {
-    try {
-      const response = await axiosInstance.post(apiEndpoint, requestData);
-      return response.data;
-    } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
-      return thunkAPI.rejectWithValue({
-        statusCode: error.response.status,
-      });
-    }
-  }
-);
+// export const createStripeIntent = createAsyncThunk(
+//   "createStripeIntent",
+//   async ({ apiEndpoint, requestData }, thunkAPI) => {
+//     try {
+//       const response = await axiosInstance.post(apiEndpoint, requestData);
+//       return response.data;
+//     } catch (error) {
+//       toast.error(error?.response?.data?.error?.message);
+//       return thunkAPI.rejectWithValue({
+//         statusCode: error.response.status,
+//       });
+//     }
+//   }
+// );
 
 export const getCurrentPlan = createAsyncThunk(
   "getCurrentPlan",
@@ -200,7 +186,7 @@ export const getCurrentPlan = createAsyncThunk(
       const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -214,7 +200,7 @@ export const changePlan = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({
         statusCode: error.response.status,
       });
@@ -243,7 +229,7 @@ export const enterpriseNewPassword = createAsyncThunk(
       toast.success(response?.data?.message);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response?.status });
     }
   }
@@ -256,7 +242,7 @@ export const subscriptionHistory = createAsyncThunk(
       const response = await axiosInstance.get(apiEndpoint);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
@@ -269,10 +255,24 @@ export const updateEnterpriseProfile = createAsyncThunk(
       const response = await axiosInstance.post(apiEndpoint, requestData);
       return response.data;
     } catch (error) {
-      toast.error(error?.response?.data?.data?.message);
+      toast.error(error?.response?.data?.error?.message);
       return thunkAPI.rejectWithValue({
         statusCode: error.response.status,
       });
+    }
+  }
+);
+
+export const removeUserFromCompany = createAsyncThunk(
+  "removeUserFromCompany",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.delete(apiEndpoint);
+      toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.error?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
     }
   }
 );

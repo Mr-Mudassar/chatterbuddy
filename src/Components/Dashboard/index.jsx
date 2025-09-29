@@ -1,5 +1,3 @@
-import React from "react";
-import LineChart from "../Charts/LineChart";
 import {
   Select,
   SelectItem,
@@ -7,15 +5,38 @@ import {
   SelectTrigger,
   SelectContent,
 } from "@/Components/ui/select";
-import SubscriptionChart from "../Charts/DonutChart";
 import DataTable from "../DataTable";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import DashboardCard from "./DashboardCard";
+import LineChart from "../Charts/LineChart";
+import React, { useEffect, useState } from "react";
+import SubscriptionChart from "../Charts/DonutChart";
+import { getAllUsers } from "@/redux/features/admin/adminApi";
+import { StatusComponent } from "@/lib/function";
 
 const DashboardComponent = () => {
-  const TechnicianListingTableHeadings = [
+  const dispatch = useDispatch();
+  const [allUsersData, setAllUsersData] = useState([]);
+  const GetAllUsersFunc = () => {
+    const data = {
+      apiEndpoint: `/users/users?page=${1}&limit=10`,
+    };
+
+    dispatch(getAllUsers(data)).then((res) => {
+      if (res?.type === "getAllUsers/fulfilled") {
+        setAllUsersData(res?.payload?.data?.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    GetAllUsersFunc();
+  }, []);
+
+  const allCompaniesHeading = [
     {
-      name: "User ID",
+      name: "User Name",
       selector: (row) => row?.firstName + " " + row?.lastName,
       sortable: true,
     },
@@ -26,53 +47,18 @@ const DashboardComponent = () => {
     },
     {
       name: "Scription",
-      selector: (row) => row?.phoneNumber,
+      selector: (row) => row?.subscriptionPlan,
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) =>
-        row.availability ? (
-          <div className="border border-green-600 text-green-600 bg-green-200 rounded-sm px-2 py-1 text-center text-sm w-24">
-            Available
-          </div>
-        ) : (
-          <div className="border border-gray-600 text-gray-600 bg-gray-300 rounded-sm px-2 py-1 text-center text-sm w-24">
-            Unavailable
-          </div>
-        ),
+      selector: (row) => StatusComponent(row?.status),
       sortable: true,
     },
-  ];
-
-  const dummyTableData = [
     {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "+1 555-1234",
-      availability: true,
-    },
-    {
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phoneNumber: "+1 555-5678",
-      availability: false,
-    },
-    {
-      firstName: "Alice",
-      lastName: "Johnson",
-      email: "alice.johnson@example.com",
-      phoneNumber: "+1 555-8765",
-      availability: true,
-    },
-    {
-      firstName: "Bob",
-      lastName: "Williams",
-      email: "bob.williams@example.com",
-      phoneNumber: "+1 555-4321",
-      availability: false,
+      name: "Action",
+      selector: (row) => StatusComponent(row?.status),
+      sortable: true,
     },
   ];
 
@@ -113,17 +99,17 @@ const DashboardComponent = () => {
       <div className="rounded-lg shadow-md bg-white  border">
         <div className="flex items-center justify-between px-6 py-4">
           <p className="font-semibold text-lg">User Listing</p>
-          <Link to="/admin/employees" className="text-primary font-semibold">
+          <Link to="/admin/usersManagement" className="text-primary font-semibold">
             See All
           </Link>
         </div>
         <div className="px-6 rounded-lg">
           <DataTable
-            pagination={true}
+            pagination={false}
             selectableRows={false}
             expandableRows={false}
-            allData={dummyTableData}
-            tableHeadings={TechnicianListingTableHeadings}
+            allData={allUsersData.slice(-5)}
+            tableHeadings={allCompaniesHeading}
           />
         </div>
       </div>

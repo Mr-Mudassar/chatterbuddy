@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Plus } from "lucide-react";
 import { useDispatch } from "react-redux";
 import DataTable from "@/Components/DataTable";
-import { getAllCompanies } from "@/redux/features/admin/adminApi";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/Components/ui/button";
-import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger } from "@/Components/ui/dialog";
-import BuyPackageForm from "@/Components/Forms/BuyPackageForm";
 import { StatusComponent } from "@/lib/function";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent } from "@/Components/ui/dialog";
+import { getAllCompanies } from "@/redux/features/admin/adminApi";
+import { Ban, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
 import CreateEnterpriseForm from "@/Components/Forms/CreateEnterpriseForm";
 
 const EnterpriseListing = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [createCompanyModal, setCreateCompanyModal] = useState(false);
   const [allCompaniesData, setAllCompaniesData] = useState([]);
+  const [createCompanyModal, setCreateCompanyModal] = useState(false);
   const GetAllCompaniesFunc = () => {
     const data = {
       apiEndpoint: `/company/companiesAdmin?page=${page}&limit=10`,
@@ -65,6 +73,57 @@ const EnterpriseListing = () => {
     {
       name: "Status",
       selector: (row) => StatusComponent(row?.isActive),
+    },
+    {
+      name: "Actions",
+      selector: (row) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} className="!bg-none cursor-pointer">
+              <EllipsisVerticalIcon className="h-6 w-6" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="p-2">
+            <DropdownMenuItem
+              className={
+                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+              }
+              onClick={() => console.log("Remove", row)}
+            >
+              <X className="w-5 h-5" />
+              Remove Enterprise
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className={
+                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+              }
+              onClick={() => console.log("Restrict", row)}
+            >
+              <Ban className="w-5 h-5" />
+              Restrict Enterprise
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className={
+                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+              }
+              onClick={() => console.log("Extend", row)}
+            >
+              <Gem className="w-5 h-5" />
+              Extend Subscription
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className={
+                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+              }
+              onClick={() =>
+                navigate(`/admin/usersManagement/${row?.companies[0]?.id}`)
+              }
+            >
+              <User className="w-5 h-5" /> View Members
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
     },
   ];
 

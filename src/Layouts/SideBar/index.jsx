@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 import { customLogout } from "@/redux/features/admin/adminSlice";
 import toast from "react-hot-toast";
+import LoadingScreen from "@/Components/LoadingScreen";
+import LoadingScreenHook from "@/hooks/loading-screen-hook";
 
 const adminNavigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -50,7 +52,6 @@ export function AppSidebar() {
   const dispatch = useDispatch();
   const pathname = location.pathname;
   const { userRole } = useSelector((state) => state?.user);
-  // const { user } = useSelector((state) => state?.user);
 
   const CustomLogout = () => {
     dispatch(customLogout());
@@ -143,7 +144,7 @@ export function AppSidebar() {
           <p className="text-sm text-red-700 font-semibold">Logout</p>
         </div>
       </SidebarFooter>
-
+      <LoadingScreenHook />
       <SidebarRail />
     </Sidebar>
   );
