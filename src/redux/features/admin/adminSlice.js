@@ -4,10 +4,11 @@ import {
   login,
   verfiyOtp,
   resendOtp,
+  adminStats,
   createUser,
+  changePlan,
   newPassword,
   getAllUsers,
-  changePlan,
   getAllPlans,
   createCompany,
   forgetPassword,
@@ -198,8 +199,10 @@ export const adminSlice = createSlice({
       })
       .addCase(updateEnterpriseProfile.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.user = action?.payload?.data?.user;
-        state.token = action?.payload?.data?.accessToken;
+        if (state?.userRole === "ADMIN") {
+          state.user = action?.payload?.data?.user;
+          state.token = action?.payload?.data?.accessToken;
+        }
       })
       .addCase(updateEnterpriseProfile.rejected, (state) => {
         state.loading = "failed";
@@ -220,6 +223,15 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(enterpriseStats.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(adminStats.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(adminStats.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(adminStats.rejected, (state) => {
         state.loading = "failed";
       });
   },

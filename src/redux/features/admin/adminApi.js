@@ -290,3 +290,16 @@ export const enterpriseStats = createAsyncThunk(
     }
   }
 );
+
+export const adminStats = createAsyncThunk(
+  "adminStats",
+  async ({ apiEndpoint }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(apiEndpoint);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.error?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);

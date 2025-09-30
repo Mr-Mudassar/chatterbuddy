@@ -69,7 +69,7 @@ const ProfileSettings = () => {
   return (
     <div className="bg-white rounded-lg shadow p-2 md:p-6 ">
       {/* Cover Image */}
-      <div className="w-full h-32 bg-gradient-to-r from-sky-200 to-sky-300 relative rounded-lg">
+      <div className="w-full h-44 bg-gradient-to-r from-sky-200 to-sky-300 relative rounded-lg">
         <div className="absolute left-6 -bottom-12 flex items-center">
           <img
             src={User}
@@ -80,7 +80,6 @@ const ProfileSettings = () => {
             <h2 className="text-lg font-semibold mt-8">
               {user?.firstName + " " + user?.lastName}
             </h2>
-            {/* <p className="text-sm text-gray-500">Update your information easily</p> */}
           </div>
         </div>
       </div>

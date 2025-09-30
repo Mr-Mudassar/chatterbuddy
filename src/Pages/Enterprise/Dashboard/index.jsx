@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Card } from "@/Components/ui/card";  
 import UserBlue from "@/Assets/user-blue.png";
 import DataTable from "@/Components/DataTable";
 import { StatusComponent } from "@/lib/function";
@@ -6,10 +7,7 @@ import UserPurple from "@/Assets/user-purple.png";
 import UserYellow from "@/Assets/user-yellow.png";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DashboardCard from "@/Components/Dashboard/DashboardCard";
 import { enterpriseStats, getAllUsers } from "@/redux/features/admin/adminApi";
-import { Card } from "@/Components/ui/card";
-import { ArrowUpRight } from "lucide-react";
 
 const EnterpriseDashboard = () => {
   const dispatch = useDispatch();

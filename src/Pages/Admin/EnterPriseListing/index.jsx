@@ -4,22 +4,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Plus } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { Check, Plus } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import DataTable from "@/Components/DataTable";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/Components/ui/button";
 import { StatusComponent } from "@/lib/function";
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/Components/ui/dialog";
-import { getAllCompanies } from "@/redux/features/admin/adminApi";
+import {
+  getAllCompanies,
+  updateEnterpriseProfile,
+} from "@/redux/features/admin/adminApi";
 import { Ban, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
 import CreateEnterpriseForm from "@/Components/Forms/CreateEnterpriseForm";
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
 
 const EnterpriseListing = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [mode, setMode] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const [allCompaniesData, setAllCompaniesData] = useState([]);
   const [createCompanyModal, setCreateCompanyModal] = useState(false);
   const GetAllCompaniesFunc = () => {
@@ -41,6 +47,22 @@ const EnterpriseListing = () => {
   const OnSuccessFunc = () => {
     GetAllCompaniesFunc();
     setCreateCompanyModal(false);
+  };
+
+  const HandleUpdateStatusFunc = (values) => {
+    const data = {
+      apiEndpoint: `/company/${selectedCompany?.companies[0]?.id}`,
+      requestData: JSON.stringify({
+        status: mode,
+      }),
+    };
+
+    dispatch(updateEnterpriseProfile(data)).then((res) => {
+      if (res?.type === "updateEnterpriseProfile/fulfilled") {
+        setSelectedCompany(null);
+        GetAllCompaniesFunc();
+      }
+    });
   };
 
   const allCompaniesHeading = [
@@ -88,29 +110,42 @@ const EnterpriseListing = () => {
               className={
                 "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
               }
-              onClick={() => console.log("Remove", row)}
+              onClick={() => {
+                setSelectedCompany(row);
+                setMode("REMOVE");
+              }}
             >
               <X className="w-5 h-5" />
               Remove Enterprise
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className={
-                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
-              }
-              onClick={() => console.log("Restrict", row)}
-            >
-              <Ban className="w-5 h-5" />
-              Restrict Enterprise
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className={
-                "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
-              }
-              onClick={() => console.log("Extend", row)}
-            >
-              <Gem className="w-5 h-5" />
-              Extend Subscription
-            </DropdownMenuItem>
+            {row?.isActive && (
+              <DropdownMenuItem
+                className={
+                  "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+                }
+                onClick={() => {
+                  setSelectedCompany(row);
+                  setMode("RESTRICTED");
+                }}
+              >
+                <Ban className="w-5 h-5" />
+                Restrict Enterprise
+              </DropdownMenuItem>
+            )}
+            {!row?.isActive && (
+              <DropdownMenuItem
+                className={
+                  "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
+                }
+                onClick={() => {
+                  setSelectedCompany(row);
+                  setMode("ACTIVE");
+                }}
+              >
+                <Check className="w-5 h-5" />
+                Activate Enterprise
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               className={
                 "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
@@ -169,6 +204,29 @@ const EnterpriseListing = () => {
           <CreateEnterpriseForm onSucess={OnSuccessFunc} />
         </DialogContent>
       </Dialog>
+
+      <ConfirmationDialog
+        title={`${
+          mode === "REMOVE"
+            ? "Remove"
+            : mode === "RESTRICT"
+            ? "Restrict"
+            : "Reactivate"
+        } User`}
+        btnStyles={"bg-red-600 hover:bg-red-700"}
+        isOpen={!!selectedCompany}
+        onClose={() => setSelectedCompany(null)}
+        description={`Are you sure you want to ${
+          mode === "REMOVE"
+            ? "Remove"
+            : mode === "RESTRICT"
+            ? "Restrict"
+            : "Reactivate"
+        } ${selectedCompany?.firstName} ${
+          selectedCompany?.lastName
+        } from your company?`}
+        onConfirm={() => HandleUpdateStatusFunc()}
+      />
     </div>
   );
 };
