@@ -2,10 +2,12 @@ import ThreeImage from "@/Assets/image-3.png";
 import AuthWrapper from "@/Components/AuthWrapper";
 import SuccessIcon from "@/Assets/success-icon.png";
 import { Button } from "@/Components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const PaymentSuccessfullComp = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex align-center justify-center px-4 py-8 h-full m-3">
       <div className="my-auto md:w-96 w-full">

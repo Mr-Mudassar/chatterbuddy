@@ -3,12 +3,6 @@ import { lazy } from "react";
 const AdminRoutes = [
   {
     role: "SUPERADMIN",
-    isPublic: true,
-    path: "/admin/login",
-    component: lazy(() => import("@/Pages/Admin/SignIn")),
-  },
-  {
-    role: "SUPERADMIN",
     isPublic: false,
     path: "/admin/dashboard",
     component: lazy(() => import("@/Pages/Admin/Dashboard")),

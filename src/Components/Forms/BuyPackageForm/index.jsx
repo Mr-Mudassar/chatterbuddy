@@ -210,7 +210,7 @@ const BuyPackageForm = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-12 rounded-full"
+                className="w-full h-12 rounded-full mt-4"
               >
                 DONE
               </Button>

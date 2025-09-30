@@ -31,7 +31,7 @@ const UserManagement = () => {
     const data = {
       apiEndpoint: params?.id
         ? `/company/${params?.id}/users?page=${page}`
-        : `/users/users?page=${page}&limit=10`,
+        : `/users/getallusers?page=${page}&limit=10`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {

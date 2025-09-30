@@ -32,11 +32,16 @@ const routes = [
     path: "/choosePlan",
     isPublic: true,
     component: lazy(() => import("../Pages/Auth/BuyPackage")),
-  },  
+  },
   {
     path: "/enterprise-new-password/:token",
     isPublic: true,
     component: lazy(() => import("../Pages/Auth/EnterpriseNewPassword")),
+  },
+  {
+    isPublic: true,
+    path: "/enterprise/paymentSuccessfull",
+    component: lazy(() => import("@/Pages/Enterprise/PaymentSuccessfull")),
   },
 ]
   .concat(AdminRoutes)

@@ -25,7 +25,7 @@ const DashboardComponent = () => {
   const [allUsersData, setAllUsersData] = useState([]);
   const GetAllUsersFunc = () => {
     const data = {
-      apiEndpoint: `/users/users?page=${1}&limit=10`,
+      apiEndpoint: `/users/getallusers?page=${1}&limit=10`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
@@ -55,19 +55,19 @@ const DashboardComponent = () => {
 
   const DashboardCardData = [
     {
-      value: cardsData?.totalCompanies,
+      value: cardsData?.totalCompanies || 0,
       title: "Total Enterprise",
       image: UserYellow,
       description: "Number of registered enterprises",
     },
     {
-      value: cardsData?.restrictedUserCount + cardsData?.activeUserCount,
+      value: cardsData?.restrictedUserCount + cardsData?.activeUserCount || 0,
       title: "Total Users",
       image: UserPurple,
       description: "Number of registered users",
     },
     {
-      value: cardsData?.activeUserCount,
+      value: cardsData?.activeUserCount || 0,
       title: "Active Users",
       image: UserBlue,
       description: "Number of active users",
@@ -92,12 +92,7 @@ const DashboardComponent = () => {
     },
     {
       name: "Status",
-      selector: (row) => StatusComponent(row?.status),
-      sortable: true,
-    },
-    {
-      name: "Action",
-      selector: (row) => StatusComponent(row?.status),
+      selector: (row) => StatusComponent(row?.isActive),
       sortable: true,
     },
   ];
