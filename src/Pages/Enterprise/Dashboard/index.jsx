@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Card } from "@/Components/ui/card";  
+import { Card } from "@/Components/ui/card";
 import UserBlue from "@/Assets/user-blue.png";
 import DataTable from "@/Components/DataTable";
 import { StatusComponent } from "@/lib/function";
@@ -116,7 +116,7 @@ const EnterpriseDashboard = () => {
             pagination={false}
             selectableRows={false}
             expandableRows={false}
-            allData={allUsersData}
+            allData={allUsersData?.slice(-5)}
             tableHeadings={allCompaniesHeading}
           />
         </div>

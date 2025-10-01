@@ -69,7 +69,7 @@ export default function SubscriptionPlans() {
                   <span className="text-muted-foreground">Plan</span>
                   <br />
                   <span className="text-sm font-normal text-muted-foreground">
-                   {currentPlanData?.peoplelimit} Users
+                    {currentPlanData?.peoplelimit} Users
                   </span>
                 </span>
                 <span className="text-2xl font-bold">
@@ -142,7 +142,7 @@ export default function SubscriptionPlans() {
                 <div className="space-y-1">
                   <p className="font-medium flex items-center">
                     <span className={`h-3 w-3 mr-2 rounded-full bg-primary `} />
-                    {sub?.plan}
+                    {sub?.plan} ({sub?.peoplelimit})
                   </p>
                   <p className="text-sm text-muted-foreground">
                     Price: {sub?.monthlyPrice}

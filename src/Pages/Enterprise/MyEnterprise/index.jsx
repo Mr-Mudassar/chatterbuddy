@@ -34,7 +34,7 @@ const MyEnterprise = () => {
   const companyId = user?.company?.id;
   const GetAllUserByCompanyFunc = (pageNo = page) => {
     const data = {
-      apiEndpoint: `/company/${companyId}/users?limit=${rowsPerPage}&page=${  }`,
+      apiEndpoint: `/company/${companyId}/users?limit=${rowsPerPage}&page=${pageNo}`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
