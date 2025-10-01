@@ -22,7 +22,6 @@ import {
 import toast from "react-hot-toast";
 import Logo from "@/Assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingScreenHook from "@/hooks/loading-screen-hook";
 import { customLogout } from "@/redux/features/admin/adminSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -128,7 +127,6 @@ export function AppSidebar() {
           <p className="text-sm text-red-700 font-semibold">Logout</p>
         </div>
       </SidebarFooter>
-      <LoadingScreenHook />
       <SidebarRail />
     </Sidebar>
   );
