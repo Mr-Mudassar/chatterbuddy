@@ -27,24 +27,15 @@ ChartJS.register(
 
 const LineChart = ({ graphData }) => {
   const data = {
-    labels: graphData?.map((item) => item?.label),
+    labels: graphData?.map((item) => item?.month),
     datasets: [
       {
-        label: "Sent",
-        data: graphData?.map((item) => item),
-        borderColor: "rgb(0, 102, 51)",
-        backgroundColor: "rgb(0, 102, 51)",
-        borderWidth: 1.5,
-        pointRadius: 3,
-        tension: 0.5,
-      },
-      {
-        label: "Redeemed",
-        data: graphData?.map((item) => item),
-        borderColor: "rgb(221, 173, 38)",
-        backgroundColor: "rgb(221, 173, 38)",
-        borderWidth: 1.5,
-        pointRadius: 3,
+        label: "Users",
+        data: graphData?.map((item) => item?.totalUsers),
+        borderColor: "rgb(0, 179, 140)",
+        backgroundColor: "rgb(0, 179, 140)",
+        borderWidth: 2,
+        pointRadius: 2,
         tension: 0.5,
       },
     ],

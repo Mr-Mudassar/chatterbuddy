@@ -78,63 +78,7 @@ export const newPasswordValidationWithoutRequired = Yup.string()
 
 export const SIGNIN_VALIDATION_SCHEMA = Yup.object().shape({
   email: emailValidation,
-  password: nameValidation,
-});
-
-export const ADD_CAR_VALIDATION_SCHEMA = Yup.object().shape({
-  year: vehicleYear,
-  make: vehicleNumber,
-  model: vehicleModel,
-  email: emailValidation,
-  lastName: nameValidation,
-  firstName: nameValidation,
-  poNumber: phoneValidation,
-  status: generalTextValidation,
-  deliveryDate: generalTextValidationWithoutRequired,
-  vehiclePoNumber: generalTextValidationWithoutRequired,
-
-  carPart: Yup.array().of(
-    Yup.object().shape({
-      price: generalTextValidationWithoutRequired,
-      ourPrice: generalTextValidationWithoutRequired,
-      supplier: generalTextValidationWithoutRequired,
-      status: generalTextValidation,
-      quantity: generalNumberValidation,
-      description: descriptionValidation,
-      partNumber: generalNumberValidation,
-      deliveryDate: generalTextValidation,
-      notes: notesValiation,
-    })
-  ),
-
-  TechnicianIds: Yup.array().of(
-    Yup.object().shape({
-      isNotify: generalBooleanValidation,
-      TechnicianId: generalNumberValidation,
-    })
-  ),
-});
-
-export const ADD_TECHNICIAN_VALIDATION_SCHEMA = Yup.object().shape({
-  email: emailValidation,
-  lastName: nameValidation,
-  firstName: nameValidation,
-  role: generalTextValidation,
-  phoneNumber: phoneValidation,
   password: newPasswordValidation,
-  specialization: generalTextValidation,
-  availability: generalBooleanValidation,
-});
-
-export const UPDATE_TECHNICIAN_VALIDATION_SCHEMA = Yup.object().shape({
-  id: Yup.string(),
-  partsDeliveryAlertDays: generalTextValidation,
-  vehicleDeliveryAlertDays: generalTextValidation,
-  vehicleFollowUpNotificationDays: generalTextValidation,
-});
-
-export const UPDATE_VEHICLE_VALIDATION_SCHEMA = Yup.object().shape({
-  status: generalTextValidation,
 });
 
 export const FORGOT_PASSWORD_SCHEMA = Yup.object().shape({

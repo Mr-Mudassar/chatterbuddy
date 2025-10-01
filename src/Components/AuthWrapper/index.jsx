@@ -13,7 +13,7 @@ const AuthWrapper = (props) => {
       </div>
       <div className="justify-center items-center m-3 md:block hidden">
         <div
-          className="flex justify-center items-end h-full w-full bg-cover bg-center bg-no-repeat rounded-xl"
+          className="flex justify-center items-end h-full w-full bg-cover bg-cover bg-no-repeat rounded-xl"
           style={{ backgroundImage: `url(${bgImage})` }}
         >
           <div className="mb-4 mx-24">

@@ -1,23 +1,33 @@
 import React from "react";
+import Loader from "@/Assets/loader.gif";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function SubscriptionChart() {
+export default function SubscriptionChart({ graphData }) {
+  if (!graphData || graphData.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <img alt="loader" src={Loader} className="w-20 h-20" />
+      </div>
+    );
+  }
+
   const data = {
-    labels: ["Other Packages", "Enterprise Package"],
+    labels: graphData.map((d) => d.group),
     datasets: [
       {
-        data: [81, 19], // percentages
-        backgroundColor: ["#FFD700", "#6B4226"], // yellow, brown
-        borderWidth: 0,
+        data: graphData.map((d) => d.percentage),
+        backgroundColor: ["#FFD700", "#6B4226"],
+        borderWidth: 6,
+        borderRadius: 10, // 👈 makes the arc edges rounded
       },
     ],
   };
 
   const options = {
-    cutout: "70%", // makes it look like a ring
+    cutout: "92%",
     plugins: {
       legend: {
         position: "bottom",
@@ -32,36 +42,30 @@ export default function SubscriptionChart() {
     },
   };
 
-  // Custom plugin to draw center text
   const centerTextPlugin = {
     id: "centerText",
-    beforeDraw: (chart) => {
-      const { width } = chart;
-      const { height } = chart;
-      const ctx = chart.ctx;
-      ctx.restore();
+    afterDraw: (chart) => {
+      if (!graphData || graphData.length === 0) return;
 
-      const fontSize = (height / 100).toFixed(2);
-      ctx.font = `${fontSize}em sans-serif`;
-      ctx.textBaseline = "middle";
-
-      const text = "81%";
-      const subText = "Other packages";
-      const textX = Math.round((width - ctx.measureText(text).width) / 2);
-      const textY = height / 2 - 10;
-
-      ctx.fillStyle = "#000";
-      ctx.fillText(text, textX, textY);
-
-      ctx.font = "14px sans-serif";
-      ctx.fillStyle = "#555";
-      ctx.fillText(
-        subText,
-        (width - ctx.measureText(subText).width) / 2,
-        textY + 25
-      );
-
+      const { width, height, ctx } = chart;
       ctx.save();
+
+      const percentage = `${graphData[0]?.percentage?.toFixed(0)}%`;
+      const label = graphData[0]?.group ?? "";
+
+      // Label above percentage
+      ctx.font = "10px sans-serif";
+      ctx.fillStyle = "#555";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, width / 2, height / 2 - 40);
+
+      // Percentage in center
+      ctx.font = "bold 36px sans-serif";
+      ctx.fillStyle = "#000";
+      ctx.fillText(percentage, width / 2, height / 2);
+
+      ctx.restore();
     },
   };
 

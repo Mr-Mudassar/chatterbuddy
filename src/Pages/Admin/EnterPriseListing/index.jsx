@@ -28,21 +28,26 @@ const EnterpriseListing = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [allCompaniesData, setAllCompaniesData] = useState([]);
   const [createCompanyModal, setCreateCompanyModal] = useState(false);
-  const GetAllCompaniesFunc = () => {
+
+  const [totalRows, setTotalRows] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const GetAllCompaniesFunc = ({ pageNo = page }) => {
     const data = {
-      apiEndpoint: `/company/companiesAdmin?page=${page}&limit=10`,
+      apiEndpoint: `/company/companiesAdmin?limit=${rowsPerPage}&page=${pageNo}`,
     };
 
     dispatch(getAllCompanies(data)).then((res) => {
       if (res?.type === "getAllCompanies/fulfilled") {
         setAllCompaniesData(res?.payload?.data?.data);
+        setTotalRows(res?.payload?.data?.total);
       }
     });
   };
 
   useEffect(() => {
-    GetAllCompaniesFunc();
-  }, []);
+    GetAllCompaniesFunc(page);
+  }, [page, rowsPerPage]);
 
   const OnSuccessFunc = () => {
     GetAllCompaniesFunc();
@@ -167,10 +172,7 @@ const EnterpriseListing = () => {
       <div className="mb-6">
         <div className="flex gap-2 items-center">
           <h2 className="font-semibold text-xl">Enterprises </h2>
-          <p className="text-gray-600">
-            {" "}
-            | {allCompaniesData?.length} companies
-          </p>
+          <p className="text-gray-600"> | {totalRows} companies</p>
         </div>
         <p className="text-sm text-gray-600">
           You can suspend or remove enterprise from here
@@ -193,6 +195,15 @@ const EnterpriseListing = () => {
           expandableRows={false}
           allData={allCompaniesData}
           tableHeadings={allCompaniesHeading}
+          totalRows={totalRows}
+          onChangePage={(page) => {
+            setPage(page);
+          }}
+          onChangeRowsPerPage={(rowPerPage, page) => {
+            console.log("newPerPage", rowPerPage, page);
+            setRowsPerPage(rowPerPage);
+            setPage(page);
+          }}
         />
       </div>
 

@@ -1,23 +1,23 @@
-import { useDispatch } from "react-redux";
-import DataTable from "@/Components/DataTable";
-import { Button } from "@/Components/ui/button";
-import { StatusComponent } from "@/lib/function";
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import {
   getAllUsers,
   removeUserFromCompany,
 } from "@/redux/features/admin/adminApi";
-import CreateUserForm from "@/Components/Forms/CreateUserForm";
-import { Ban, Check, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import DataTable from "@/Components/DataTable";
+import { Button } from "@/Components/ui/button";
+import { StatusComponent } from "@/lib/function";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent } from "@/Components/ui/dialog";
+import CreateUserForm from "@/Components/Forms/CreateUserForm";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+import { Ban, Check, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
 
 const UserManagement = () => {
   const params = useParams();
@@ -27,23 +27,28 @@ const UserManagement = () => {
   const [allUsersData, setAllUsersData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
-  const GetAllCompaniesFunc = () => {
+
+  const [totalRows, setTotalRows] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const GetAllCompaniesFunc = (pageNo) => {
     const data = {
       apiEndpoint: params?.id
-        ? `/company/${params?.id}/users?page=${page}`
-        : `/users/getallusers?page=${page}&limit=10`,
+        ? `/company/${params?.id}/users?limit=${rowsPerPage}&page=${pageNo}`
+        : `/users/getallusers?limit=${rowsPerPage}&page=${pageNo}`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
       if (res?.type === "getAllUsers/fulfilled") {
         setAllUsersData(res?.payload?.data?.data);
+        setTotalRows(res?.payload?.data?.pagination?.total);
       }
     });
   };
 
   useEffect(() => {
-    GetAllCompaniesFunc();
-  }, []);
+    GetAllCompaniesFunc(page);
+  }, [page, rowsPerPage]);
 
   const RemoveUserFromCompanyfunc = () => {
     const data = {
@@ -52,14 +57,16 @@ const UserManagement = () => {
 
     dispatch(removeUserFromCompany(data)).then((res) => {
       if (res?.type === "removeUserFromCompany/fulfilled") {
-        GetAllCompaniesFunc();
+        setPage(1);
+        GetAllCompaniesFunc(1);
         setSelectedUser(null);
       }
     });
   };
 
   const OnSuccessFunc = () => {
-    GetAllCompaniesFunc();
+    setPage(1);
+    GetAllCompaniesFunc(1);
     setCreateUserModal(false);
   };
 
@@ -146,7 +153,7 @@ const UserManagement = () => {
       <div className="mb-6">
         <div className="flex gap-2 items-center">
           <h2 className="font-semibold text-xl">User Management </h2>
-          <p className="text-gray-600"> | {allUsersData?.length} users</p>
+          <p className="text-gray-600"> | {totalRows} users</p>
         </div>
         <p className="text-sm text-gray-600">
           You can suspend or remove member from here
@@ -160,6 +167,15 @@ const UserManagement = () => {
           expandableRows={false}
           allData={allUsersData}
           tableHeadings={allCompaniesHeading}
+          totalRows={totalRows}
+          onChangePage={(page) => {
+            setPage(page);
+          }}
+          onChangeRowsPerPage={(rowPerPage, page) => {
+            console.log("newPerPage", rowPerPage, page);
+            setRowsPerPage(rowPerPage);
+            setPage(page);
+          }}
         />
       </div>
 

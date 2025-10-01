@@ -1,28 +1,34 @@
-import {
-  Select,
-  SelectItem,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-} from "@/Components/ui/select";
+// import {
+//   Select,
+//   SelectItem,
+//   SelectValue,
+//   SelectTrigger,
+//   SelectContent,
+// } from "@/Components/ui/select";
 import { Card } from "../ui/card";
 import DataTable from "../DataTable";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import LineChart from "../Charts/LineChart";
+import { ArrowUpRight } from "lucide-react";
 import UserBlue from "@/Assets/user-blue.png";
 import { StatusComponent } from "@/lib/function";
 import UserPurple from "@/Assets/user-purple.png";
 import UserYellow from "@/Assets/user-yellow.png";
 import React, { useEffect, useState } from "react";
 import SubscriptionChart from "../Charts/DonutChart";
-import { adminStats, getAllUsers } from "@/redux/features/admin/adminApi";
-import { ArrowUpRight } from "lucide-react";
+import {
+  adminStats,
+  getAllUsers,
+  getUserStatsByMonths,
+} from "@/redux/features/admin/adminApi";
 
 const DashboardComponent = () => {
   const dispatch = useDispatch();
   const [cardsData, setCardsData] = useState();
   const [allUsersData, setAllUsersData] = useState([]);
+  const [userDataForGraph, setUserDataForGraph] = useState([]);
+  const [userAndEnterpriseRatio, setUserAndEnterpriseRatio] = useState([]);
   const GetAllUsersFunc = () => {
     const data = {
       apiEndpoint: `/users/getallusers?page=${1}&limit=10`,
@@ -48,9 +54,37 @@ const DashboardComponent = () => {
     });
   };
 
+  const GetUsersDataByMonthForGraph = () => {
+    const data = {
+      apiEndpoint: `/users/getUserStatsByMonth?year=${new Date().getFullYear()}`,
+    };
+
+    dispatch(getUserStatsByMonths(data)).then((res) => {
+      if (res?.type === "getUserStatsByMonths/fulfilled") {
+        console.log("Line", res?.payload?.data);
+        setUserDataForGraph(res?.payload?.data[0]?.months);
+      }
+    });
+  };
+
+  const GetUserAndEnterpriseRationFunc = () => {
+    const data = {
+      apiEndpoint: `/users/getSubscriptionDistribution`,
+    };
+
+    dispatch(getUserStatsByMonths(data)).then((res) => {
+      if (res?.type === "getUserStatsByMonths/fulfilled") {
+        console.log("Pie", res?.payload?.data);
+        setUserAndEnterpriseRatio(res?.payload?.data?.enterpriseVsOthers);
+      }
+    });
+  };
+
   useEffect(() => {
     GetAllUsersFunc();
     DashboardCardsDataFunc();
+    GetUsersDataByMonthForGraph();
+    GetUserAndEnterpriseRationFunc();
   }, []);
 
   const DashboardCardData = [
@@ -122,7 +156,7 @@ const DashboardComponent = () => {
         <div className="bg-white p-4 rounded-lg shadow-md h-full col-span-2 border">
           <div className="flex  justify-between items-center">
             <p className="font-semibold text-lg">Overview</p>
-            <Select onValueChange={(val) => setFieldValue("employees", val)}>
+            {/* <Select onValueChange={(val) => setFieldValue("employees", val)}>
               <SelectTrigger className=" py-2      border-gray-400 rounded-full ">
                 <SelectValue placeholder="Overview" />
               </SelectTrigger>
@@ -133,19 +167,13 @@ const DashboardComponent = () => {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
           </div>
-          <LineChart
-            mode={"RedemptionsGraph"}
-            graphData={[
-              34, 4343, 56454, 5454634, 6465436436, 636436, 46436, 46436, 46436,
-              46436, 46436, 46436,
-            ]}
-          />
+          <LineChart mode={"RedemptionsGraph"} graphData={userDataForGraph} />
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md h-full border ">
           <p className="font-semibold text-lg mb-2">Subscriptions</p>
-          <SubscriptionChart />
+          <SubscriptionChart graphData={userAndEnterpriseRatio} />
         </div>
       </div>
 

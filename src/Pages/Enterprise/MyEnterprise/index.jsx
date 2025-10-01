@@ -28,26 +28,26 @@ const MyEnterprise = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
 
+  const [totalRows, setTotalRows] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const companyId = user?.company?.id;
-  const GetAllUserByCompanyFunc = () => {
+  const GetAllUserByCompanyFunc = (pageNo = page) => {
     const data = {
-      apiEndpoint: `/company/${companyId}/users?page=${page}`,
+      apiEndpoint: `/company/${companyId}/users?limit=${rowsPerPage}&page=${  }`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
       if (res?.type === "getAllUsers/fulfilled") {
-        console.log(
-          "Respone of all companies listing",
-          res?.payload?.data?.data
-        );
         setAllUsersData(res?.payload?.data?.data);
+        setTotalRows(res?.payload?.data?.total);
       }
     });
   };
 
   useEffect(() => {
-    GetAllUserByCompanyFunc();
-  }, []);
+    GetAllUserByCompanyFunc(page);
+  }, [page, rowsPerPage]);
 
   const OnSuccessFunc = () => {
     GetAllUserByCompanyFunc();
@@ -145,7 +145,7 @@ const MyEnterprise = () => {
       <div className="mb-6">
         <div className="flex gap-2 items-center">
           <h2 className="font-semibold text-xl">User Management </h2>
-          <p className="text-gray-600"> | {allUsersData?.length} users</p>
+          <p className="text-gray-600"> | {totalRows} users</p>
         </div>
         <p className="text-sm text-gray-600">
           You can suspend or remove member from here
@@ -168,6 +168,15 @@ const MyEnterprise = () => {
           expandableRows={false}
           allData={allUsersData}
           tableHeadings={allCompaniesHeading}
+          totalRows={totalRows}
+          onChangePage={(page) => {
+            setPage(page);
+          }}
+          onChangeRowsPerPage={(rowPerPage, page) => {
+            console.log("newPerPage" ,rowPerPage, page);
+            setRowsPerPage(rowPerPage);
+            setPage(page);
+          }}
         />
       </div>
 

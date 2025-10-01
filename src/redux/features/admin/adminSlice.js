@@ -16,7 +16,9 @@ import {
   getAllCompanies,
   enterpriseStats,
   createPaymentIntent,
+  getUserStatsByMonths,
   subscriptionHistory,
+  userEnterpriseRation,
   enterpriseNewPassword,
   removeUserFromCompany,
   updateEnterpriseProfile,
@@ -232,6 +234,24 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(adminStats.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(getUserStatsByMonths.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(getUserStatsByMonths.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(getUserStatsByMonths.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(userEnterpriseRation.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(userEnterpriseRation.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(userEnterpriseRation.rejected, (state) => {
         state.loading = "failed";
       });
   },
