@@ -13,17 +13,20 @@ import { useParams } from "react-router-dom";
 import DataTable from "@/Components/DataTable";
 import { Button } from "@/Components/ui/button";
 import { StatusComponent } from "@/lib/function";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import CreateUserForm from "@/Components/Forms/CreateUserForm";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
 import { Ban, Check, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
+import { Input } from "@/Components/ui/input";
 
 const UserManagement = () => {
+  const timer = useRef();
   const params = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [mode, setMode] = useState("");
+  const [search, setSearch] = useState("");
   const [allUsersData, setAllUsersData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
@@ -34,8 +37,8 @@ const UserManagement = () => {
   const GetAllCompaniesFunc = (pageNo) => {
     const data = {
       apiEndpoint: params?.id
-        ? `/company/${params?.id}/users?limit=${rowsPerPage}&page=${pageNo}`
-        : `/users/getallusers?limit=${rowsPerPage}&page=${pageNo}`,
+        ? `/company/${params?.id}/users?limit=${rowsPerPage}&page=${pageNo}&search=${search}`
+        : `/users/getallusers?limit=${rowsPerPage}&page=${pageNo}&search=${search}`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
@@ -48,7 +51,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     GetAllCompaniesFunc(page);
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, search]);
 
   const RemoveUserFromCompanyfunc = () => {
     const data = {
@@ -150,20 +153,31 @@ const UserManagement = () => {
 
   return (
     <div className="border rounded-md p-6 shadow-md bg-white">
-      <div className="mb-6">
-        <div className="flex gap-2 items-center">
-          <h2 className="font-semibold text-xl">User Management </h2>
-          <p className="text-gray-600"> | {totalRows} users</p>
+      <div className="flex justify-between mb-6">
+        <div className="">
+          <div className="flex gap-2 items-center">
+            <h2 className="font-semibold text-xl">User Management </h2>
+            <p className="text-gray-600"> | {totalRows} users</p>
+          </div>
+          <p className="text-sm text-gray-600">
+            You can suspend or remove member from here
+          </p>
         </div>
-        <p className="text-sm text-gray-600">
-          You can suspend or remove member from here
-        </p>
+
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="h-12 rounded-full max-w-lg w-full"
+          onChange={(e) => {
+            clearTimeout(timer.current);
+            timer.current = setTimeout(() => setSearch(e.target.value), 500);
+          }}
+        />
       </div>
 
       <div className="rounded-lg">
         <DataTable
           pagination={true}
-          selectableRows={false}
           expandableRows={false}
           allData={allUsersData}
           tableHeadings={allCompaniesHeading}
@@ -172,7 +186,6 @@ const UserManagement = () => {
             setPage(page);
           }}
           onChangeRowsPerPage={(rowPerPage, page) => {
-            console.log("newPerPage", rowPerPage, page);
             setRowsPerPage(rowPerPage);
             setPage(page);
           }}

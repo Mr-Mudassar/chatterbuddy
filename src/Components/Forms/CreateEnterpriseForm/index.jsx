@@ -1,12 +1,12 @@
+import React from "react";
+import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/components/ui/button";
-import React from "react";
 import { createCompany } from "@/redux/features/admin/adminApi";
 import PhoneNumberInputField from "@/Components/PhoneNumberInputField";
-import * as Yup from "yup";
 
 // Validation schema with Yup
 const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
@@ -19,14 +19,14 @@ const PURCHASE_PLAN_VALIDATION_SCHEMA = Yup.object().shape({
     .required("Email is required"),
 });
 
-// Initial empty values (user must fill)
 const INITIAL_VALUES = {
   name: "",
   contact: "",
   email: "",
 };
 
-const CreateEnterpriseForm = ({ onSucess }) => {
+const CreateEnterpriseForm = (props) => {
+  const { onSuccess } = props;
   const dispatch = useDispatch();
 
   const handleCreateCompany = (values) => {
@@ -43,7 +43,7 @@ const CreateEnterpriseForm = ({ onSucess }) => {
 
     dispatch(createCompany(body)).then((res) => {
       if (res.type === "createCompany/fulfilled") {
-        onSucess();
+        onSuccess();
       }
     });
   };

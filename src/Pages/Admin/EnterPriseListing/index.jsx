@@ -1,26 +1,28 @@
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Check, Plus } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import DataTable from "@/Components/DataTable";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/Components/ui/button";
-import { StatusComponent } from "@/lib/function";
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import {
   getAllCompanies,
   updateEnterpriseProfile,
 } from "@/redux/features/admin/adminApi";
+import { Check, Plus } from "lucide-react";
+import { useDispatch } from "react-redux";
+import DataTable from "@/Components/DataTable";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/Components/ui/button";
+import { StatusComponent } from "@/lib/function";
+import React, { useEffect, useRef, useState } from "react";
+import { Dialog, DialogContent } from "@/Components/ui/dialog";
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
 import { Ban, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
 import CreateEnterpriseForm from "@/Components/Forms/CreateEnterpriseForm";
-import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+import { Input } from "@/Components/ui/input";
 
 const EnterpriseListing = () => {
+  const timer = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
@@ -29,12 +31,13 @@ const EnterpriseListing = () => {
   const [allCompaniesData, setAllCompaniesData] = useState([]);
   const [createCompanyModal, setCreateCompanyModal] = useState(false);
 
+  const [search, setSearch] = useState("");
   const [totalRows, setTotalRows] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const GetAllCompaniesFunc = ({ pageNo = page }) => {
     const data = {
-      apiEndpoint: `/company/companiesAdmin?limit=${rowsPerPage}&page=${pageNo}`,
+      apiEndpoint: `/company/companiesAdmin?limit=${rowsPerPage}&page=${pageNo}&search=${search}`,
     };
 
     dispatch(getAllCompanies(data)).then((res) => {
@@ -46,15 +49,10 @@ const EnterpriseListing = () => {
   };
 
   useEffect(() => {
-    GetAllCompaniesFunc(page);
-  }, [page, rowsPerPage]);
+    GetAllCompaniesFunc(1);
+  }, [page, rowsPerPage, search]);
 
-  const OnSuccessFunc = () => {
-    GetAllCompaniesFunc();
-    setCreateCompanyModal(false);
-  };
-
-  const HandleUpdateStatusFunc = (values) => {
+  const HandleUpdateStatusFunc = () => {
     const data = {
       apiEndpoint: `/company/${selectedCompany?.companies[0]?.id}`,
       requestData: JSON.stringify({
@@ -65,9 +63,14 @@ const EnterpriseListing = () => {
     dispatch(updateEnterpriseProfile(data)).then((res) => {
       if (res?.type === "updateEnterpriseProfile/fulfilled") {
         setSelectedCompany(null);
-        GetAllCompaniesFunc();
+        GetAllCompaniesFunc(1);
       }
     });
+  };
+
+  const OnSuccessFunc = () => {
+    GetAllCompaniesFunc(1);
+    setCreateCompanyModal(false);
   };
 
   const allCompaniesHeading = [
@@ -179,7 +182,16 @@ const EnterpriseListing = () => {
         </p>
       </div>
 
-      <div className="mb-4 w-full flex justify-end">
+      <div className="mb-4 w-full flex justify-between items-center">
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="h-12 rounded-full max-w-lg w-full"
+          onChange={(e) => {
+            clearTimeout(timer.current);
+            timer.current = setTimeout(() => setSearch(e.target.value), 500);
+          }}
+        />
         <Button
           className={"h-12 rounded-full px-4"}
           onClick={() => setCreateCompanyModal(true)}
@@ -191,7 +203,6 @@ const EnterpriseListing = () => {
       <div className="rounded-lg">
         <DataTable
           pagination={true}
-          selectableRows={true}
           expandableRows={false}
           allData={allCompaniesData}
           tableHeadings={allCompaniesHeading}
@@ -212,7 +223,7 @@ const EnterpriseListing = () => {
         onOpenChange={() => setCreateCompanyModal(!createCompanyModal)}
       >
         <DialogContent>
-          <CreateEnterpriseForm onSucess={OnSuccessFunc} />
+          <CreateEnterpriseForm onSuccess={OnSuccessFunc} />
         </DialogContent>
       </Dialog>
 

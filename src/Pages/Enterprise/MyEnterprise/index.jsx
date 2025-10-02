@@ -12,14 +12,16 @@ import { Plus } from "lucide-react";
 import DataTable from "@/Components/DataTable";
 import { Button } from "@/Components/ui/button";
 import { StatusComponent } from "@/lib/function";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import CreateUserForm from "@/Components/Forms/CreateUserForm";
 import { Ban, Check, EllipsisVerticalIcon, X } from "lucide-react";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+import { Input } from "@/Components/ui/input";
 
 const MyEnterprise = () => {
+  const timer = useRef();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [mode, setMode] = useState("");
@@ -28,13 +30,14 @@ const MyEnterprise = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
 
+  const [search, setSearch] = useState("");
   const [totalRows, setTotalRows] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const companyId = user?.company?.id;
   const GetAllUserByCompanyFunc = (pageNo = page) => {
     const data = {
-      apiEndpoint: `/company/${companyId}/users?limit=${rowsPerPage}&page=${pageNo}`,
+      apiEndpoint: `/company/${companyId}/users?limit=${rowsPerPage}&page=${pageNo}&search=${search}`,
     };
 
     dispatch(getAllUsers(data)).then((res) => {
@@ -47,7 +50,7 @@ const MyEnterprise = () => {
 
   useEffect(() => {
     GetAllUserByCompanyFunc(page);
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, search]);
 
   const OnSuccessFunc = () => {
     GetAllUserByCompanyFunc();
@@ -152,7 +155,16 @@ const MyEnterprise = () => {
         </p>
       </div>
 
-      <div className="mb-4 w-full flex justify-end">
+      <div className="mb-4 w-full flex justify-between items-center">
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="h-12 rounded-full max-w-lg w-full"
+          onChange={(e) => {
+            clearTimeout(timer.current);
+            timer.current = setTimeout(() => setSearch(e.target.value), 500);
+          }}
+        />
         <Button
           className={"h-12 rounded-full px-4"}
           onClick={() => setCreateUserModal(true)}
@@ -164,7 +176,6 @@ const MyEnterprise = () => {
       <div className="rounded-lg">
         <DataTable
           pagination={true}
-          selectableRows={true}
           expandableRows={false}
           allData={allUsersData}
           tableHeadings={allCompaniesHeading}
@@ -173,7 +184,7 @@ const MyEnterprise = () => {
             setPage(page);
           }}
           onChangeRowsPerPage={(rowPerPage, page) => {
-            console.log("newPerPage" ,rowPerPage, page);
+            console.log("newPerPage", rowPerPage, page);
             setRowsPerPage(rowPerPage);
             setPage(page);
           }}
