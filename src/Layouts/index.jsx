@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 import { AppSidebar } from "./SideBar";
-import LoadingScreenHook from "@/hooks/loading-screen-hook";
+import LoadingScreenHook from "@/Hooks/loading-screen-hook";
 import { SidebarInset, SidebarProvider } from "@/Components/ui/sidebar";
 
 export default function DashboardLayout({ children }) {

@@ -11,7 +11,6 @@ export function PrivateRoute({ Component, props, role }) {
     if (!user) {
       navigate("/login");
     } else if (user) {
-      // if role-based routing is needed, uncomment and adjust below
       user.role !== role && navigate("/");
     }
   }, [navigate, user]);

@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Logo from "@/Assets/logo.png";
 import BgImage from "@/Assets/admin-auth-img.png";
-import LoadingScreenHook from "@/hooks/loading-screen-hook";
+import LoadingScreenHook from "@/Hooks/loading-screen-hook";
 
 const AuthWrapper = (props) => {
   const { AuthForm, imgDescription, imgHeading, bgImage = BgImage } = props;
