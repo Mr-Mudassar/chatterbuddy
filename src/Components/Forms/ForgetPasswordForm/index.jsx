@@ -72,13 +72,13 @@ const ForgotPasswordForm = (props) => {
                     </div>
                   </div>
                   {errors.email && touched.email && (
-                    <div className="text-red-500 text-sm mt-1">
+                    <div className="text-red-500 text-xs mt-1">
                       {errors.email}
                     </div>
                   )}
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Button type="submit" className="w-full h-12 rounded-full">
                     GET CODE
                   </Button>

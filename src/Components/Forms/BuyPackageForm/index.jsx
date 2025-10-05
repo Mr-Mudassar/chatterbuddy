@@ -166,7 +166,7 @@ const BuyPackageForm = () => {
                   }`}
                 />
                 {errors.email && touched.email && (
-                  <div className="text-red-500 text-sm">{errors.email}</div>
+                  <div className="text-red-500 text-xs">{errors.email}</div>
                 )}
               </div>
 
@@ -201,7 +201,7 @@ const BuyPackageForm = () => {
                   </SelectContent>
                 </Select>
                 {errors.subscriptionPlan && touched.subscriptionPlan && (
-                  <div className="text-red-500 text-sm">
+                  <div className="text-red-500 text-xs">
                     {errors.subscriptionPlan}
                   </div>
                 )}

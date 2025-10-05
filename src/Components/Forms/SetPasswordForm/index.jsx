@@ -103,7 +103,7 @@ const SetPasswordForm = () => {
                     </button>
                   </div>
                   {errors.newPassword && touched.newPassword && (
-                    <div className="text-red-500 text-sm mt-1">
+                    <div className="text-red-500 text-xs mt-1">
                       {errors.newPassword}
                     </div>
                   )}

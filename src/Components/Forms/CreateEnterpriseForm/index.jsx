@@ -85,7 +85,7 @@ const CreateEnterpriseForm = (props) => {
                 }`}
               />
               {errors.name && touched.name && (
-                <div className="text-red-500 text-sm">{errors.name}</div>
+                <div className="text-red-500 text-xs">{errors.name}</div>
               )}
             </div>
 
@@ -123,7 +123,7 @@ const CreateEnterpriseForm = (props) => {
                 }`}
               />
               {errors.email && touched.email && (
-                <div className="text-red-500 text-sm">{errors.email}</div>
+                <div className="text-red-500 text-xs">{errors.email}</div>
               )}
             </div>
 

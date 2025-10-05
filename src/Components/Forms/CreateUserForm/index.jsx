@@ -85,7 +85,7 @@ const CreateUserForm = ({ onSuccess }) => {
                 }`}
               />
               {errors.email && touched.email && (
-                <div className="text-red-500 text-sm">{errors.email}</div>
+                <div className="text-red-500 text-xs">{errors.email}</div>
               )}
             </div>
 
@@ -115,7 +115,7 @@ const CreateUserForm = ({ onSuccess }) => {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
               {errors.password && touched.password && (
-                <div className="text-red-500 text-sm">{errors.password}</div>
+                <div className="text-red-500 text-xs">{errors.password}</div>
               )}
             </div>
 
