@@ -82,7 +82,7 @@ const SignInForm = () => {
                     </div>
                   </div>
                   {errors.email && touched.email && (
-                    <div className="text-red-500 text-sm mt-1">
+                    <div className="text-red-500 text-xs mt-1">
                       {errors.email}
                     </div>
                   )}
@@ -119,7 +119,7 @@ const SignInForm = () => {
                     </button>
                   </div>
                   {errors.password && touched.password && (
-                    <div className="text-red-500 text-sm mt-1">
+                    <div className="text-red-500 text-xs mt-1">
                       {errors.password}
                     </div>
                   )}

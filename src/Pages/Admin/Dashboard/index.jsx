@@ -113,7 +113,7 @@ const Dashboard = () => {
       sortable: true,
     },
     {
-      name: "Scription",
+      name: "Subscription",
       selector: (row) => row?.subscriptionPlan,
       sortable: true,
     },

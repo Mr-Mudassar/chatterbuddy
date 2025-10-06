@@ -44,7 +44,7 @@ const UserManagement = () => {
     dispatch(getAllUsers(data)).then((res) => {
       if (res?.type === "getAllUsers/fulfilled") {
         setAllUsersData(res?.payload?.data?.data);
-        setTotalRows(res?.payload?.data?.pagination?.total);
+        setTotalRows(res?.payload?.data?.total);
       }
     });
   };

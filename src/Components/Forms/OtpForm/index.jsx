@@ -105,7 +105,7 @@ const OtpForm = () => {
                   )}
                 />
                 {errors.token && touched.token && (
-                  <p className="text-sm text-red-500">{errors.token}</p>
+                  <p className="text-xs text-red-500">{errors.token}</p>
                 )}
               </div>
 
