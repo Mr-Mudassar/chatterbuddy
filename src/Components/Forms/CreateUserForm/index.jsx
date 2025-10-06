@@ -56,10 +56,8 @@ const CreateUserForm = ({ onSuccess }) => {
   return (
     // <div className="flex align-center justify-center h-full">
     <div className="w-full">
-      <h3 className="w-full text-4xl font-bold">Add User</h3>
-      <p className="text-gray-500 mb-4">
-        You can add employees by uploading a file or can add them manually
-      </p>
+      {/* <h3 className="w-full text-4xl font-bold">Add User</h3> */}
+      <p className=" mb-4 font-semibold text-xl">Add User Manaully</p>
 
       <Formik
         initialValues={INITIAL_VALUES}

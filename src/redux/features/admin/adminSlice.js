@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import {
   login,
+  uploadCsv,
   verfiyOtp,
   resendOtp,
   adminStats,
@@ -252,6 +253,15 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(userEnterpriseRation.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(uploadCsv.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(uploadCsv.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(uploadCsv.rejected, (state) => {
         state.loading = "failed";
       });
   },
