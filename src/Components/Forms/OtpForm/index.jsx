@@ -40,8 +40,9 @@ const OtpForm = () => {
 
     dispatch(verfiyOtp(data)).then((res) => {
       if (res.type === "verfiyOtp/fulfilled") {
+        console.log("Response form varify otp", res);
         navigate("/setNewPassword", {
-          state: { email: location?.state?.email, code: values?.token },
+          state: { token: res?.payload?.data?.resetToken },
         });
       }
     });

@@ -30,7 +30,7 @@ const UserManagement = () => {
   const [allUsersData, setAllUsersData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
-
+  const [maxUserLimit, setMaxUserLimit] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -45,6 +45,8 @@ const UserManagement = () => {
       if (res?.type === "getAllUsers/fulfilled") {
         setAllUsersData(res?.payload?.data?.data);
         setTotalRows(res?.payload?.data?.total);
+        res?.payload?.data?.peoplelimit &&
+          setMaxUserLimit(res?.payload?.data?.peoplelimit);
       }
     });
   };
@@ -157,7 +159,10 @@ const UserManagement = () => {
         <div className="">
           <div className="flex gap-2 items-center">
             <h2 className="font-semibold text-xl">User Management </h2>
-            <p className="text-gray-600"> | {totalRows} users</p>
+            <p className="text-gray-600">
+              {totalRows} users
+              {maxUserLimit !== 0 && ` out of ${maxUserLimit?.split("-")[1]}`}
+            </p>
           </div>
           <p className="text-sm text-gray-600">
             You can suspend or remove member from here

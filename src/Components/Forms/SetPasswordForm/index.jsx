@@ -16,7 +16,7 @@ const SetPasswordForm = () => {
   const location = useLocation();
 
   useEffect(() => {
-    (!location?.state?.email || !location?.state?.code) && navigate("/");
+    !location?.state?.token && navigate("/");
   }, []);
 
   const handleSubmit = (values) => {
@@ -24,8 +24,7 @@ const SetPasswordForm = () => {
       apiEndpoint: "/auth/reset-password",
       requestData: JSON.stringify({
         ...values,
-        email: location?.state?.email,
-        code: location?.state?.code,
+        resetToken: location?.state?.token,
       }),
     };
 
@@ -50,7 +49,6 @@ const SetPasswordForm = () => {
           <Formik
             initialValues={{
               ...NEW_PASSWORD_INITIAL_VALUES,
-              email: location?.state?.email,
             }}
             validationSchema={NEW_PASSWORD_VALIDATION_SCHEMA}
             onSubmit={(values) => {

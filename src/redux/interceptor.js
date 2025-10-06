@@ -20,7 +20,7 @@ const initializeAxiosInterceptors = async () => {
 
       if (hasFiles) {
         config.headers["Content-Type"] = "multipart/form-data";
-        config.headers["maxBodyLength"] = "Infinity";
+        config.headers["Accept"] = "*/*";
       } else {
         config.headers["Content-Type"] = "application/json";
         config.headers["Accept"] = "application/json";

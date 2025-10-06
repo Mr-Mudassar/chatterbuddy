@@ -91,7 +91,6 @@ export const VERIFY_OTP_VALIDATION_SCHEMA = Yup.object().shape({
 });
 
 export const NEW_PASSWORD_VALIDATION_SCHEMA = Yup.object().shape({
-  email: emailValidation,
   newPassword: newPasswordValidation,
 });
 

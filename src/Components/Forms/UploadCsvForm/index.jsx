@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/Components/ui/button";
 import { uploadCsv } from "@/redux/features/admin/adminApi";
 
-const UploadCsvForm = (onSuccess) => {
+const UploadCsvForm = ({ onSuccess }) => {
   const fileInputRef = useRef();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.user);
@@ -51,6 +51,9 @@ const UploadCsvForm = (onSuccess) => {
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+    for (let [key, value] of formData.entries()) {
+      console.log("File data", key, value);
+    }
 
     const data = {
       apiEndpoint: `/company/${user?.company?.id}/users/upload`,
