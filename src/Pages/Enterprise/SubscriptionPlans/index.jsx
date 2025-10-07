@@ -14,9 +14,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 export default function SubscriptionPlans() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const loading = useSelector((state) => state?.user);
   const [currentPlanData, setCurrentPlanData] = useState();
   const [subcriptionHistoryData, setSubscriptionHistoryData] = useState([]);
+
+  console.log("Usersssssssssssssssss", user);
 
   if (loading === "pending") {
     return <LoadingScreen />;
@@ -24,7 +27,7 @@ export default function SubscriptionPlans() {
 
   const getCurrentPlanFunc = () => {
     const data = {
-      apiEndpoint: "/subscriptions/status",
+      apiEndpoint: `/subscriptions/status/${user?.company?.id}`,
     };
 
     dispatch(getCurrentPlan(data)).then((res) => {
