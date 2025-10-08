@@ -96,7 +96,7 @@ const EnterpriseListing = () => {
     },
 
     {
-      name: "Scription",
+      name: "Subscription",
       selector: (row) => row?.companies[0]?.subscriptionPlan,
       sortable: true,
     },
@@ -159,7 +159,11 @@ const EnterpriseListing = () => {
                 "cursor-pointer rounded-full py-3 px-4 !hover:bg-[#ccf0e8]"
               }
               onClick={() =>
-                navigate(`/admin/usersManagement/${row?.companies[0]?.id}`)
+                navigate(`/admin/usersManagement/${row?.companies[0]?.id}`, {
+                  state: {
+                    companyName: row?.companies[0]?.name,
+                  },
+                })
               }
             >
               <User className="w-5 h-5" /> View Members

@@ -18,6 +18,8 @@ import {
   SidebarGroupLabel,
   SidebarMenuButton,
   SidebarGroupContent,
+  useSidebar,
+  SidebarTrigger,
 } from "@/Components/ui/sidebar";
 import toast from "react-hot-toast";
 import Logo from "@/Assets/logo.png";
@@ -45,7 +47,9 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { state } = useSidebar();
   const pathname = location.pathname;
+  const isSidebarCollapsed = state === "collapsed";
   const { userRole } = useSelector((state) => state?.user);
 
   const CustomLogout = () => {
@@ -66,6 +70,8 @@ export function AppSidebar() {
             className="mt-4 mb-4 max-w-44"
           />
         </Link>
+
+        {/* <SidebarTrigger className="text-gray-700 bg-white h-12 w-12 shadow-md border" /> */}
       </SidebarHeader>
 
       <SidebarContent>
@@ -76,7 +82,8 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {AllNavigation.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive =
+                  pathname === item.href || pathname.includes(item.href);
 
                 return (
                   <SidebarMenuItem

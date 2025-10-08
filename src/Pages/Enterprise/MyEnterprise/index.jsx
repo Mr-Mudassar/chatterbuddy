@@ -54,7 +54,8 @@ const MyEnterprise = () => {
       if (res?.type === "getAllUsers/fulfilled") {
         setAllUsersData(res?.payload?.data?.data);
         setTotalRows(res?.payload?.data?.total);
-        setMaxUserLimit(res?.payload?.data?.peoplelimit);
+        res?.payload?.data?.peoplelimit &&
+          setMaxUserLimit(res?.payload?.data?.peoplelimit);
       }
     });
   };

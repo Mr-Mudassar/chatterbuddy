@@ -1,38 +1,39 @@
 import {
-  getAllUsers,
-  removeUserFromCompany,
-} from "@/redux/features/admin/adminApi";
-import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
+import {
+  getAllUsers,
+  removeUserFromCompany,
+} from "@/redux/features/admin/adminApi";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Input } from "@/Components/ui/input";
 import DataTable from "@/Components/DataTable";
 import { Button } from "@/Components/ui/button";
 import { StatusComponent } from "@/lib/function";
+import { useLocation, useParams } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import CreateUserForm from "@/Components/Forms/CreateUserForm";
+import { Ban, Check, EllipsisVerticalIcon, X } from "lucide-react";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
-import { Ban, Check, EllipsisVerticalIcon, Gem, User, X } from "lucide-react";
-import { Input } from "@/Components/ui/input";
 
 const UserManagement = () => {
   const timer = useRef();
   const params = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [mode, setMode] = useState("");
   const [search, setSearch] = useState("");
+  const [totalRows, setTotalRows] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [maxUserLimit, setMaxUserLimit] = useState(0);
   const [allUsersData, setAllUsersData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [createUserModal, setCreateUserModal] = useState(false);
-  const [maxUserLimit, setMaxUserLimit] = useState(0);
-  const [totalRows, setTotalRows] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const GetAllCompaniesFunc = (pageNo) => {
     const data = {
@@ -153,6 +154,8 @@ const UserManagement = () => {
     },
   ];
 
+  console.log("name is state", location?.state?.companyName);
+
   return (
     <div className="border rounded-md p-6 shadow-md bg-white">
       <div className="flex justify-between mb-6">
@@ -160,6 +163,8 @@ const UserManagement = () => {
           <div className="flex gap-2 items-center">
             <h2 className="font-semibold text-xl">User Management </h2>
             <p className="text-gray-600">
+              {location?.state?.companyName &&
+                location?.state?.companyName + " |"}{" "}
               {totalRows} users
               {maxUserLimit !== 0 && ` out of ${maxUserLimit?.split("-")[1]}`}
             </p>
