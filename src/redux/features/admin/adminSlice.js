@@ -14,6 +14,7 @@ import {
   createCompany,
   forgetPassword,
   getCurrentPlan,
+  bulkUserActions,
   getAllCompanies,
   enterpriseStats,
   createPaymentIntent,
@@ -262,6 +263,15 @@ export const adminSlice = createSlice({
         state.loading = "succeeded";
       })
       .addCase(uploadCsv.rejected, (state) => {
+        state.loading = "failed";
+      })
+      .addCase(bulkUserActions.pending, (state) => {
+        state.loading = "pending";
+      })
+      .addCase(bulkUserActions.fulfilled, (state) => {
+        state.loading = "succeeded";
+      })
+      .addCase(bulkUserActions.rejected, (state) => {
         state.loading = "failed";
       });
   },

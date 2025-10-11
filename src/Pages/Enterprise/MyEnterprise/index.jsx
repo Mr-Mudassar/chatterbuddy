@@ -1,48 +1,59 @@
 import {
+  Select,
+  SelectItem,
+  SelectValue,
+  SelectContent,
+  SelectTrigger,
+} from "@/components/ui/select";
+import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import {
+  bulkUserActions,
   getAllUsers,
   removeUserFromCompany,
 } from "@/redux/features/admin/adminApi";
-import { Plus, UploadCloud } from "lucide-react";
+import { Plus } from "lucide-react";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import DataTable from "@/Components/DataTable";
 import { Button } from "@/Components/ui/button";
 import { StatusComponent } from "@/lib/function";
-import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import UploadCsvForm from "@/Components/Forms/UploadCsvForm";
 import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import CreateUserForm from "@/Components/Forms/CreateUserForm";
 import { Ban, Check, EllipsisVerticalIcon, X } from "lucide-react";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
-import { Input } from "@/Components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/Components/ui/label";
-import UploadCsvForm from "@/Components/Forms/UploadCsvForm";
 
 const MyEnterprise = () => {
   const timer = useRef();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [mode, setMode] = useState("");
-  const [method, setMethod] = useState("manual");
-  const [allUsersData, setAllUsersData] = useState([]);
-  const { user } = useSelector((state) => state?.user);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [createUserModal, setCreateUserModal] = useState(false);
-  const [maxUserLimit, setMaxUserLimit] = useState(0);
   const [search, setSearch] = useState("");
   const [totalRows, setTotalRows] = useState(0);
+  const [method, setMethod] = useState("manual");
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [maxUserLimit, setMaxUserLimit] = useState(0);
+  const [allUsersData, setAllUsersData] = useState([]);
+  const { user } = useSelector((state) => state?.user);
+  const [bulkSelected, setBulkSelected] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [createUserModal, setCreateUserModal] = useState(false);
+  const [resetSelectedRows, setResetSelectedRows] = useState(false);
+  const [showBulkConfirmationModal, setShowBulkConfirmationModal] =
+    useState(null);
+
+  useEffect(() => {
+    if (resetSelectedRows) {
+      setResetSelectedRows(false);
+    }
+  }, [resetSelectedRows]);
 
   const companyId = user?.company?.id;
   const GetAllUserByCompanyFunc = (pageNo = page) => {
@@ -81,6 +92,28 @@ const MyEnterprise = () => {
       }
     });
   };
+
+  const BulkUserActionsFunc = () => {
+    const data = {
+      apiEndpoint: "/company/users/bulk-action",
+      requestData: {
+        userIds: bulkSelected,
+        action: showBulkConfirmationModal,
+        companyId: user?.company?.id,
+      },
+    };
+
+    dispatch(bulkUserActions(data)).then((res) => {
+      if (res?.type === "bulkUserActions/fulfilled") {
+        setBulkSelected([]);
+        setResetSelectedRows(true);
+        setShowBulkConfirmationModal(null);
+        GetAllUserByCompanyFunc();
+      }
+    });
+  };
+
+  console.log("bulk selected", bulkSelected);
 
   const allCompaniesHeading = [
     {
@@ -171,7 +204,7 @@ const MyEnterprise = () => {
         </p>
       </div>
 
-      <div className="mb-4 w-full flex justify-between items-center">
+      <div className="mb-4 w-full flex justify-between items-center gap-2">
         <Input
           type="search"
           placeholder="Search..."
@@ -181,21 +214,49 @@ const MyEnterprise = () => {
             timer.current = setTimeout(() => setSearch(e.target.value), 500);
           }}
         />
-        <Button
-          className={"h-12 rounded-full px-4"}
-          onClick={() => setCreateUserModal(true)}
-        >
-          <Plus className="w-5 h-5" /> Add User
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            className={"h-12 rounded-full px-4"}
+            onClick={() => setShowBulkConfirmationModal("REMOVE")}
+            disabled={bulkSelected.length === 0}
+          >
+            <Plus className="w-5 h-5" /> Remove Users
+          </Button>
+          <Button
+            className={"h-12 rounded-full px-4"}
+            onClick={() => setShowBulkConfirmationModal("RESTRICT")}
+            disabled={bulkSelected.length === 0}
+          >
+            <Plus className="w-5 h-5" /> Restrict Users
+          </Button>
+          <Button
+            className={"h-12 rounded-full px-4"}
+            onClick={() => setShowBulkConfirmationModal("ACTIVE")}
+            disabled={bulkSelected.length === 0}
+          >
+            <Plus className="w-5 h-5" /> Reactivate Users
+          </Button>
+          <Button
+            className={"h-12 rounded-full px-4"}
+            onClick={() => setCreateUserModal(true)}
+          >
+            <Plus className="w-5 h-5" /> Add User
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-lg">
         <DataTable
           pagination={true}
+          totalRows={totalRows}
+          handleSelectedRowsChange={(state) => {
+            setBulkSelected(state?.selectedRows?.map((item) => item.id));
+          }}
+          selectableRows={true}
           expandableRows={false}
           allData={allUsersData}
           tableHeadings={allCompaniesHeading}
-          totalRows={totalRows}
+          clearSelectedRows={resetSelectedRows}
           onChangePage={(page) => {
             setPage(page);
           }}
@@ -264,6 +325,27 @@ const MyEnterprise = () => {
           selectedUser?.lastName
         } from your company?`}
         onConfirm={() => RemoveUserFromCompanyfunc()}
+      />
+
+      <ConfirmationDialog
+        title={`${
+          showBulkConfirmationModal === "REMOVE"
+            ? "Remove"
+            : showBulkConfirmationModal === "RESTRICT"
+            ? "Restrict"
+            : "Reactivate"
+        } User`}
+        btnStyles={"bg-red-600 hover:bg-red-700"}
+        isOpen={!!showBulkConfirmationModal}
+        onClose={() => setShowBulkConfirmationModal(null)}
+        description={`Are you sure you want to ${
+          showBulkConfirmationModal === "REMOVE"
+            ? "Remove"
+            : showBulkConfirmationModal === "RESTRICT"
+            ? "Restrict"
+            : "Reactivate"
+        } these selected users from your company?`}
+        onConfirm={() => BulkUserActionsFunc()}
       />
     </div>
   );

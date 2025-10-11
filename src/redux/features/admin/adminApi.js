@@ -343,3 +343,17 @@ export const uploadCsv = createAsyncThunk(
     }
   }
 );
+
+export const bulkUserActions = createAsyncThunk(
+  "bulkUserActions",
+  async ({ apiEndpoint, requestData }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoint, requestData);
+      toast.success(response?.data?.message);
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.error?.message);
+      return thunkAPI.rejectWithValue({ statusCode: error.response.status });
+    }
+  }
+);

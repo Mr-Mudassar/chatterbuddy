@@ -11,6 +11,7 @@ const DataTableComponent = (props) => {
     expandableRows,
     selectableRows,
     ExpandedComponent,
+    clearSelectedRows,
     pagination = false,
     onChangeRowsPerPage,
     selectableRowDisabled,
@@ -63,7 +64,7 @@ const DataTableComponent = (props) => {
       paginationTotalRows={totalRows}
       selectableRows={selectableRows}
       expandableRows={expandableRows}
-      // clearSelectedRows={clearSelectedRows}
+      clearSelectedRows={clearSelectedRows}
       onChangeRowsPerPage={onChangeRowsPerPage}
       expandableRowsComponent={ExpandedComponent}
       selectableRowDisabled={selectableRowDisabled}
