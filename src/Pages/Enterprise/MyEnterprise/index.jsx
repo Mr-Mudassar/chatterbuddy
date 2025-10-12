@@ -220,21 +220,24 @@ const MyEnterprise = () => {
             onClick={() => setShowBulkConfirmationModal("REMOVE")}
             disabled={bulkSelected.length === 0}
           >
-            <Plus className="w-5 h-5" /> Remove Users
+            <X className="w-5 h-5" />
+            Remove Users
           </Button>
           <Button
             className={"h-12 rounded-full px-4"}
             onClick={() => setShowBulkConfirmationModal("RESTRICT")}
             disabled={bulkSelected.length === 0}
           >
-            <Plus className="w-5 h-5" /> Restrict Users
+            <Ban className="w-5 h-5" />
+            Restrict Users
           </Button>
           <Button
             className={"h-12 rounded-full px-4"}
             onClick={() => setShowBulkConfirmationModal("ACTIVE")}
             disabled={bulkSelected.length === 0}
           >
-            <Plus className="w-5 h-5" /> Reactivate Users
+            <Check className="w-5 h-5" />
+            Reactivate Users
           </Button>
           <Button
             className={"h-12 rounded-full px-4"}
