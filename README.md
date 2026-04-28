@@ -62,6 +62,7 @@ This repository contains code from a client project I worked on. It is shared he
 <img width="1916" height="881" alt="image" src="https://github.com/user-attachments/assets/a8457e34-7654-4dc7-81a9-052ad9a8bf31" />
 </br>
 </br>
-<img width="1219" height="767" alt="image" src="https://github.com/user-attachments/assets/b8c98724-2880-451c-a234-33e62a0df9ee" />
+<img width="841" height="612" alt="image" src="https://github.com/user-attachments/assets/09776eaf-8214-4cbe-8e82-acce5a450191" />
+
 
 
